@@ -93,9 +93,16 @@ export class SkiaRenderer {
     const colorArray = this.CanvasKit.parseColorString(color);
     paint.setColor(colorArray);
     
+    // Enable anti-aliasing for better quality
+    paint.setAntiAlias(true);
+    
     if (style === 'stroke') {
       paint.setStyle(this.CanvasKit.PaintStyle.Stroke);
       paint.setStrokeWidth(strokeWidth);
+      
+      // Set stroke cap and join for better line quality
+      paint.setStrokeCap(this.CanvasKit.StrokeCap.Round);
+      paint.setStrokeJoin(this.CanvasKit.StrokeJoin.Round);
     } else {
       paint.setStyle(this.CanvasKit.PaintStyle.Fill);
     }
@@ -159,6 +166,9 @@ export class SkiaRenderer {
       if (!ctx) {
         throw new Error('Failed to create 2D context');
       }
+
+      // Get device pixel ratio for high-DPI text rendering
+      const pixelRatio = window.devicePixelRatio || 1;
       
       // Measure text first
       ctx.font = `${fontSize}px Arial, sans-serif`;
@@ -166,9 +176,16 @@ export class SkiaRenderer {
       const textWidth = Math.ceil(metrics.width) + 4; // Add padding
       const textHeight = Math.ceil(fontSize * 1.2) + 4; // Add padding
       
-      // Set canvas size
-      tempCanvas.width = textWidth;
-      tempCanvas.height = textHeight;
+      // Set canvas size with pixel ratio for high-DPI
+      tempCanvas.width = textWidth * pixelRatio;
+      tempCanvas.height = textHeight * pixelRatio;
+      
+      // Scale back to original size via CSS
+      tempCanvas.style.width = `${textWidth}px`;
+      tempCanvas.style.height = `${textHeight}px`;
+      
+      // Scale the drawing context for high-DPI
+      ctx.scale(pixelRatio, pixelRatio);
       
       // Clear and setup context again (canvas resize clears it)
       ctx.font = `${fontSize}px Arial, sans-serif`;
@@ -176,28 +193,34 @@ export class SkiaRenderer {
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       
+      // Enable smooth text rendering
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      
       // Clear background (make it transparent)
       ctx.clearRect(0, 0, textWidth, textHeight);
       
-      // Draw text
+      // Draw text with high quality
       ctx.fillText(text, 2, 2); // Small padding
       
       // Convert to Skia image using the most reliable method
-      const imageData = ctx.getImageData(0, 0, textWidth, textHeight);
+      const imageData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
       const pixels = new Uint8Array(imageData.data);
       
       const skiaImage = this.CanvasKit.MakeImage({
-        width: textWidth,
-        height: textHeight,
+        width: tempCanvas.width,
+        height: tempCanvas.height,
         alphaType: this.CanvasKit.AlphaType.Unpremul,
         colorType: this.CanvasKit.ColorType.RGBA_8888,
         colorSpace: this.CanvasKit.ColorSpace.SRGB,
-      }, pixels, textWidth * 4);
+      }, pixels, tempCanvas.width * 4);
       
       if (skiaImage) {
-        // Draw the text image on the Skia canvas
+        // Draw the text image on the Skia canvas with high quality paint
         const paint = new this.CanvasKit.Paint();
-        const srcRect = this.CanvasKit.XYWHRect(0, 0, textWidth, textHeight);
+        paint.setAntiAlias(true);
+        
+        const srcRect = this.CanvasKit.XYWHRect(0, 0, tempCanvas.width, tempCanvas.height);
         const destRect = this.CanvasKit.XYWHRect(x, y - 2, textWidth, textHeight); // Adjust for padding
         
         skiaCanvas.drawImageRect(skiaImage, srcRect, destRect, paint);

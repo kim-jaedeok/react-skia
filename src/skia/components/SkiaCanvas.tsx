@@ -21,8 +21,20 @@ export function SkiaCanvas({ width, height, children, style }: SkiaCanvasProps) 
       return;
     }
 
-    // Create surface using modern API
-    const surface = CanvasKit.MakeSWCanvasSurface(canvasRef.current);
+    // Get device pixel ratio for high-DPI displays
+    const pixelRatio = window.devicePixelRatio || 1;
+    const canvasElement = canvasRef.current;
+    
+    // Set actual canvas size for high resolution
+    canvasElement.width = width * pixelRatio;
+    canvasElement.height = height * pixelRatio;
+    
+    // Scale canvas back to original size via CSS
+    canvasElement.style.width = `${width}px`;
+    canvasElement.style.height = `${height}px`;
+
+    // Create surface using modern API with high-DPI support
+    const surface = CanvasKit.MakeSWCanvasSurface(canvasElement);
     if (!surface) {
       console.log('❌ Failed to create surface');
       return;
@@ -32,6 +44,9 @@ export function SkiaCanvas({ width, height, children, style }: SkiaCanvasProps) 
 
     // Render children
     const canvas = surface.getCanvas();
+    
+    // Scale the drawing context for high-DPI
+    canvas.scale(pixelRatio, pixelRatio);
     canvas.clear(CanvasKit.WHITE);
 
     if (children) {
