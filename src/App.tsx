@@ -22,7 +22,7 @@ import {
   SkiaCanvas,
   SkiaProvider,
   Text,
-} from "./skia";
+} from "./react-skia";
 
 // 애니메이션 데모 컴포넌트
 function AnimatedCircle({
