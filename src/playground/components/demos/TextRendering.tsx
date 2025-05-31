@@ -1,5 +1,3 @@
-import React from "react";
-
 import { SkiaCanvas, Text } from "../../../react-skia";
 
 export function TextRendering() {

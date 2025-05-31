@@ -1,7 +1,7 @@
-import React from "react";
+import { createElement } from "react";
 
 import type { ColorMatrixProps } from "../types";
 
 export function ColorMatrix({ matrix, children }: ColorMatrixProps) {
-  return React.createElement("skia-colormatrix", { matrix }, children);
+  return createElement("skia-colormatrix", { matrix }, children);
 }

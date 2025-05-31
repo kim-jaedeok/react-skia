@@ -1,4 +1,4 @@
-import React from "react";
+import { type ReactNode, createElement } from "react";
 
 import type { RectProps } from "../types";
 
@@ -11,8 +11,8 @@ export function Rect({
   strokeWidth = 1,
   style = "fill",
   children,
-}: RectProps & { children?: React.ReactNode }) {
-  return React.createElement(
+}: RectProps & { children?: ReactNode }) {
+  return createElement(
     "skia-rect",
     {
       x,

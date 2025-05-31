@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Circle, SkiaCanvas, Text } from "../../../react-skia";
 
 export function PerformanceTest() {

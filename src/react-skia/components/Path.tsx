@@ -1,4 +1,4 @@
-import React from "react";
+import { type ReactNode, createElement } from "react";
 
 import type { PathProps } from "../types";
 
@@ -8,8 +8,8 @@ export function Path({
   strokeWidth = 1,
   style = "fill",
   children,
-}: PathProps & { children?: React.ReactNode }) {
-  return React.createElement(
+}: PathProps & { children?: ReactNode }) {
+  return createElement(
     "skia-path",
     {
       path,

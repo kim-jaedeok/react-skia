@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
 import {
   Easing,
@@ -15,7 +15,7 @@ import { Circle, Group, Path, Rect, SkiaCanvas, Text } from "../../react-skia";
 function PendulumSimulation() {
   const angle = useSharedValue(45); // 초기 각도
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 진자의 물리적 운동 시뮬레이션
     angle.value = withRepeat(
       withSequence(
@@ -96,9 +96,9 @@ function PendulumSimulation() {
 function GravitySimulation() {
   const ballY = useSharedValue(30);
   const ballX = useSharedValue(50);
-  const [isDropping, setIsDropping] = React.useState(false);
+  const [isDropping, setIsDropping] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 자동으로 중력 시뮬레이션 시작
     const startSimulation = () => {
       setIsDropping(true);
@@ -170,7 +170,7 @@ function GearSystem() {
   const gear2Rotation = useSharedValue(0);
   const gear3Rotation = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 기어 1 (큰 기어) - 가장 느림
     gear1Rotation.value = withRepeat(
       withTiming(360, { duration: 4000, easing: Easing.linear }),

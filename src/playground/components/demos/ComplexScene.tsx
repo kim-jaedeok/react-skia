@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Circle, Path, Rect, SkiaCanvas } from "../../../react-skia";
 
 export function ComplexScene() {

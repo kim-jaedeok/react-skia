@@ -1,4 +1,4 @@
-import React from "react";
+import { createElement } from "react";
 
 interface ImageProps {
   x: number;
@@ -19,7 +19,7 @@ export function Image({
   fit = "fill",
   opacity = 1,
 }: ImageProps) {
-  return React.createElement("skia-image", {
+  return createElement("skia-image", {
     x,
     y,
     width,

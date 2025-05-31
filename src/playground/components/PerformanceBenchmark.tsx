@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useMemo } from "react";
 
 import {
   Easing,
@@ -22,7 +22,7 @@ function ManyAnimatedCircles() {
     useSharedValue(1),
   );
 
-  const circles = React.useMemo(
+  const circles = useMemo(
     () =>
       Array.from({ length: numCircles }, (_, i) => ({
         id: i,
@@ -35,7 +35,7 @@ function ManyAnimatedCircles() {
     [rotationValues, scaleValues],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     circles.forEach((circle, i) => {
       // Staggered rotation animation
       circle.rotation.value = withRepeat(
@@ -116,7 +116,7 @@ function ManyAnimatedCircles() {
 function FluidMotion() {
   const time = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     time.value = withRepeat(
       withTiming(Math.PI * 4, { duration: 5000, easing: Easing.linear }),
       -1,
@@ -146,7 +146,7 @@ function FluidMotion() {
   });
 
   // Create wave-like motion for multiple elements
-  const elements = React.useMemo(
+  const elements = useMemo(
     () =>
       Array.from({ length: 20 }, (_, i) => {
         return {
@@ -203,7 +203,7 @@ function ComplexTransforms() {
   const rotation3 = useSharedValue(0);
   const scale = useSharedValue(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Multiple nested rotations at different speeds
     rotation1.value = withRepeat(
       withTiming(360, { duration: 3000, easing: Easing.linear }),

@@ -53,7 +53,7 @@ function AnimatedDemo() {
   const translateX = useSharedValue(0);
   const scale = useSharedValue(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 무한 반복 애니메이션
     translateX.value = withRepeat(
       withSequence(

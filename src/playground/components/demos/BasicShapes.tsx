@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Circle, Rect, SkiaCanvas, Text } from "../../../react-skia";
 
 export function BasicShapes() {

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import type { ReactNode } from "react";
+import { useEffect, useRef } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import type { Surface } from "canvaskit-wasm";
 
@@ -10,7 +10,7 @@ interface SkiaCanvasProps {
   width: number;
   height: number;
   children?: ReactNode;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 export function SkiaCanvas({

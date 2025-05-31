@@ -1,5 +1,10 @@
-import type { ReactElement, ReactNode } from "react";
-import React from "react";
+import {
+  Children,
+  Fragment,
+  type ReactElement,
+  type ReactNode,
+  isValidElement,
+} from "react";
 
 import type { Canvas, CanvasKit, Paint, Path } from "canvaskit-wasm";
 
@@ -11,8 +16,8 @@ export class SkiaRenderer {
   }
 
   render(children: ReactNode, canvas: Canvas): void {
-    React.Children.forEach(children, child => {
-      if (React.isValidElement(child)) {
+    Children.forEach(children, child => {
+      if (isValidElement(child)) {
         this.renderElement(child, canvas);
       } else {
         console.log("❌ Invalid React element:", child);
@@ -24,7 +29,7 @@ export class SkiaRenderer {
     const { type, props } = element;
 
     // React Fragment 처리
-    if (type === React.Fragment) {
+    if (type === Fragment) {
       if (props && typeof props === "object" && "children" in props) {
         this.render(props.children as ReactNode, canvas);
       }
@@ -81,7 +86,7 @@ export class SkiaRenderer {
           result = (type as any)(props);
         }
 
-        if (React.isValidElement(result)) {
+        if (isValidElement(result)) {
           this.renderElement(result, canvas);
         } else {
           console.log(
@@ -173,8 +178,8 @@ export class SkiaRenderer {
   ): void {
     if (!props || !props.children) return;
 
-    React.Children.forEach(props.children, child => {
-      if (!React.isValidElement(child)) return;
+    Children.forEach(props.children, child => {
+      if (!isValidElement(child)) return;
 
       const { type } = child;
       const childProps = child.props as any;
@@ -199,7 +204,7 @@ export class SkiaRenderer {
             result = (type as any)(childProps);
           }
 
-          if (React.isValidElement(result)) {
+          if (isValidElement(result)) {
             if (result.type === "skia-linear-gradient") {
               this.applyLinearGradient(result.props as any, paint, bounds);
             } else if (result.type === "skia-radial-gradient") {
@@ -909,8 +914,8 @@ export class SkiaRenderer {
     }
 
     let hasGradient = false;
-    React.Children.forEach(props.children, child => {
-      if (!React.isValidElement(child)) return;
+    Children.forEach(props.children, child => {
+      if (!isValidElement(child)) return;
 
       const { type } = child;
 
@@ -936,7 +941,7 @@ export class SkiaRenderer {
             result = (type as any)(child.props);
           }
 
-          if (React.isValidElement(result)) {
+          if (isValidElement(result)) {
             if (
               result.type === "skia-linear-gradient" ||
               result.type === "skia-radial-gradient"
@@ -957,8 +962,8 @@ export class SkiaRenderer {
   private renderNonGradientChildren(props: any, canvas: Canvas): void {
     if (!props || !props.children) return;
 
-    React.Children.forEach(props.children, child => {
-      if (!React.isValidElement(child)) return;
+    Children.forEach(props.children, child => {
+      if (!isValidElement(child)) return;
 
       const { type } = child;
 

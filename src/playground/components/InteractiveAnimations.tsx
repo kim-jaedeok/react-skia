@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 
 import {
   Easing,
@@ -15,7 +15,7 @@ function InteractiveButton() {
   const scale = useSharedValue(1);
   const rotation = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 자동 애니메이션
     const animate = () => {
       scale.value = withSequence(
@@ -76,7 +76,7 @@ function AnimatedClock() {
   const minutesAngle = useSharedValue(0);
   const hoursAngle = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const now = new Date();
     const seconds = now.getSeconds();
     const minutes = now.getMinutes();
@@ -231,7 +231,7 @@ function LoadingSpinners() {
   const scale1 = useSharedValue(1);
   const scale2 = useSharedValue(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 회전 스피너 1
     rotation1.value = withRepeat(
       withTiming(360, { duration: 1000, easing: Easing.linear }),

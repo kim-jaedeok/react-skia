@@ -1,4 +1,4 @@
-import React from "react";
+import { createElement } from "react";
 
 export interface LinearGradientProps {
   start: { x: number; y: number };
@@ -23,7 +23,7 @@ export function LinearGradient({
   positions,
   mode = "clamp",
 }: LinearGradientProps) {
-  return React.createElement("skia-linear-gradient", {
+  return createElement("skia-linear-gradient", {
     start,
     end,
     colors,
@@ -39,7 +39,7 @@ export function RadialGradient({
   positions,
   mode = "clamp",
 }: RadialGradientProps) {
-  return React.createElement("skia-radial-gradient", {
+  return createElement("skia-radial-gradient", {
     center,
     radius,
     colors,

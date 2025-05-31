@@ -1,11 +1,11 @@
-import React from "react";
+import type { ComponentType } from "react";
 
 export interface DemoItem {
   id: string;
   title: string;
   icon: string;
   description: string;
-  Component: React.ComponentType;
+  Component: ComponentType;
 }
 
 interface SidebarProps {

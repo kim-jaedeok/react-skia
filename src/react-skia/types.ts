@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type {
   CanvasKit,
   Font,
@@ -44,7 +46,7 @@ export interface SkiaContextValue {
 export interface DrawingProps {
   width: number;
   height: number;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export interface RectProps {
@@ -85,17 +87,17 @@ export interface TextProps {
 export interface GroupProps {
   transform?: string | number[];
   opacity?: number;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export interface BlurProps {
   blur: number;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export interface ColorMatrixProps {
   matrix: number[];
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export interface ImageProps {

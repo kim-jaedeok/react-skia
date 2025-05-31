@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useMemo } from "react";
 
 import {
   Easing,
@@ -17,7 +17,7 @@ function OrbitAnimation() {
   const rotation = useSharedValue(0);
   const scale = useSharedValue(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 회전 애니메이션
     rotation.value = withRepeat(
       withTiming(360, { duration: 4000, easing: Easing.linear }),
@@ -98,7 +98,7 @@ function SpringPhysics() {
   const ballY = useSharedValue(50);
   const squashScale = useSharedValue(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // 공 떨어뜨리기 애니메이션 (스프링 물리)
     const dropBall = () => {
       ballY.value = withSpring(140, {
@@ -165,7 +165,7 @@ function WaveAnimation() {
   const phase = useSharedValue(0);
   const amplitude = useSharedValue(20);
 
-  React.useEffect(() => {
+  useEffect(() => {
     phase.value = withRepeat(
       withTiming(Math.PI * 4, { duration: 3000, easing: Easing.linear }),
       -1,
@@ -246,7 +246,7 @@ function ParticleSystem() {
     useSharedValue(1),
   );
 
-  const particles = React.useMemo(
+  const particles = useMemo(
     () =>
       Array.from({ length: 20 }, (_, i) => ({
         id: i,
@@ -263,7 +263,7 @@ function ParticleSystem() {
     ],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const animateParticles = () => {
       particles.forEach((particle, i) => {
         const angle = (i / particles.length) * Math.PI * 2;

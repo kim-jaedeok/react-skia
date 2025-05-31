@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 
 import {
   Easing as ReanimatedEasing,
@@ -29,7 +29,7 @@ export function AnimationDemo() {
   const translateX = useReanimatedSharedValue(0);
   const scale = useReanimatedSharedValue(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // withRepeat를 사용한 무한 반복 애니메이션
     translateX.value = withRepeat(
       withSequence(

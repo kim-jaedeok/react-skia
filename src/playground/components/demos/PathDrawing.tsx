@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Path, SkiaCanvas, Text } from "../../../react-skia";
 
 export function PathDrawing() {

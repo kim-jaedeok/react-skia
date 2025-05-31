@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Group, Image, Rect, SkiaCanvas, Text } from "../../../react-skia";
 
 export function ImageRendering() {
