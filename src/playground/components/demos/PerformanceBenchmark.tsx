@@ -7,8 +7,8 @@ import {
   withRepeat,
   withSequence,
   withTiming,
-} from "../../react-reanimated";
-import { Circle, Group, Rect, SkiaCanvas, Text } from "../../react-skia";
+} from "../../../react-reanimated";
+import { Circle, Group, Rect, SkiaCanvas, Text } from "../../../react-skia";
 
 // Performance benchmark with many animated elements
 function ManyAnimatedCircles() {

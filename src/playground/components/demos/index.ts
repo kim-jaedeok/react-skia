@@ -1,16 +1,16 @@
-import { AdvancedAnimations } from "../AdvancedAnimations";
-import { InteractiveAnimations } from "../InteractiveAnimations";
-import { PhysicsAnimations } from "../PhysicsAnimations";
 import type { DemoItem } from "../Sidebar";
+import { AdvancedAnimations } from "./AdvancedAnimations";
 import { AnimationDemo } from "./AnimationDemo";
 import { BasicShapes } from "./BasicShapes";
 import { ComplexScene } from "./ComplexScene";
 import { GradientEffects } from "./GradientEffects";
 import { GroupAndOpacity } from "./GroupAndOpacity";
 import { ImageRendering } from "./ImageRendering";
+import { InteractiveAnimations } from "./InteractiveAnimations";
 import { InteractiveDemo } from "./InteractiveDemo";
 import { PathDrawing } from "./PathDrawing";
 import { PerformanceTest } from "./PerformanceTest";
+import { PhysicsAnimations } from "./PhysicsAnimations";
 import { ProjectStatus } from "./ProjectStatus";
 import { TextRendering } from "./TextRendering";
 
@@ -35,13 +35,6 @@ export const DEMO_ITEMS: DemoItem[] = [
     icon: "🎨",
     description: "SVG 호환 패스",
     Component: PathDrawing,
-  },
-  {
-    id: "animation",
-    title: "애니메이션",
-    icon: "⚡",
-    description: "이동 + 크기 애니메이션",
-    Component: AnimationDemo,
   },
   {
     id: "group-opacity",
@@ -84,6 +77,13 @@ export const DEMO_ITEMS: DemoItem[] = [
     icon: "🖼️",
     description: "이미지 로딩 및 표시",
     Component: ImageRendering,
+  },
+  {
+    id: "animation",
+    title: "애니메이션",
+    icon: "⚡",
+    description: "이동 + 크기 애니메이션",
+    Component: AnimationDemo,
   },
   {
     id: "advanced-animations",

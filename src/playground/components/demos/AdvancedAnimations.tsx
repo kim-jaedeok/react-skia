@@ -9,8 +9,15 @@ import {
   withSequence,
   withSpring,
   withTiming,
-} from "../../react-reanimated";
-import { Circle, Group, Path, Rect, SkiaCanvas, Text } from "../../react-skia";
+} from "../../../react-reanimated";
+import {
+  Circle,
+  Group,
+  Path,
+  Rect,
+  SkiaCanvas,
+  Text,
+} from "../../../react-skia";
 
 // 복잡한 궤도 애니메이션
 function OrbitAnimation() {
