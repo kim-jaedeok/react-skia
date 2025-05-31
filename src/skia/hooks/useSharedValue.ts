@@ -16,7 +16,6 @@ export function useSharedValue(initialValue: number) {
       cancelAnimationFrame(animationRef.current);
     }
 
-    const startValue = value;
     const startTime = Date.now();
     const { duration, easing = (t: number) => t, loop = false } = config;
 
@@ -25,7 +24,7 @@ export function useSharedValue(initialValue: number) {
       const progress = Math.min(elapsed / duration, 1);
       const easedProgress = easing(progress);
       
-      const currentValue = startValue + (toValue - startValue) * easedProgress;
+      const currentValue = value + (toValue - value) * easedProgress;
       setValue(currentValue);
 
       if (progress < 1) {
@@ -38,7 +37,7 @@ export function useSharedValue(initialValue: number) {
           const loopProgress = Math.min(loopElapsed / duration, 1);
           const loopEasedProgress = easing(loopProgress);
           
-          const loopValue = toValue + (startValue - toValue) * loopEasedProgress;
+          const loopValue = toValue + (value - toValue) * loopEasedProgress;
           setValue(loopValue);
 
           if (loopProgress < 1) {
@@ -62,7 +61,6 @@ export function useSharedValue(initialValue: number) {
     }
 
     const { stiffness = 100, damping = 10 } = config;
-    const startValue = value;
     let velocity = 0;
 
     const animate = () => {

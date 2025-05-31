@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { SkiaCanvas, Circle, Rect, Group, Text } from '../skia';
+import { useEffect } from 'react';
+import { SkiaCanvas, Circle, Group, Text } from '../skia';
 import { useSharedValue, Easing } from '../skia/hooks/useSharedValue';
 
 export function AnimatedDemo() {

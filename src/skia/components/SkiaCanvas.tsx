@@ -73,6 +73,8 @@ export function SkiaCanvas({ width, height, children, style }: SkiaCanvasProps) 
       height={height}
       style={{
         border: '1px solid #ccc',
+        width: `${width}px`,
+        height: `${height}px`,
         ...style,
       }}
     />

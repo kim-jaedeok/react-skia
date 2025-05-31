@@ -22,6 +22,22 @@ export class SkiaRenderer {
   private renderElement(element: ReactElement, canvas: Canvas): void {
     const { type, props } = element;
 
+    // React Fragment 처리
+    if (type === React.Fragment) {
+      if (props && typeof props === 'object' && 'children' in props) {
+        this.render(props.children as ReactNode, canvas);
+      }
+      return;
+    }
+
+    // Symbol Fragment 처리 (JSX <></> 문법)
+    if (typeof type === 'symbol') {
+      if (props && typeof props === 'object' && 'children' in props) {
+        this.render(props.children as ReactNode, canvas);
+      }
+      return;
+    }
+
     if (typeof type === 'string') {
       switch (type) {
         case 'skia-rect':
@@ -47,12 +63,6 @@ export class SkiaRenderer {
           break;
         case 'skia-image':
           this.renderImage(props, canvas);
-          break;
-        case 'skia-linear-gradient':
-          this.renderWithLinearGradient(props, canvas);
-          break;
-        case 'skia-radial-gradient':
-          this.renderWithRadialGradient(props, canvas);
           break;
       }
     } else if (typeof type === 'function') {
@@ -82,8 +92,14 @@ export class SkiaRenderer {
       console.log('❓ Unknown type:', typeof type, type);
     }
 
-    // Render children if they exist
-    if (props && typeof props === 'object' && 'children' in props) {
+    // 특정 요소들은 자체적으로 자식을 처리하므로 여기서는 제외
+    const elementsWithOwnChildRendering = [
+      'skia-rect', 'skia-circle', 'skia-path', 'skia-text'
+    ];
+    
+    // 자식 렌더링 (기본 요소가 아닌 경우에만)
+    if (props && typeof props === 'object' && 'children' in props && 
+        typeof type === 'string' && !elementsWithOwnChildRendering.includes(type)) {
       this.render(props.children as ReactNode, canvas);
     }
   }
@@ -110,28 +126,206 @@ export class SkiaRenderer {
     return paint;
   }
 
+  // 기본 색상 없이 Paint 생성하는 함수
+  private createPaintWithoutColor(style: 'fill' | 'stroke' = 'fill', strokeWidth: number = 1): Paint {
+    const paint = new this.CanvasKit.Paint();
+    
+    // Enable anti-aliasing for better quality
+    paint.setAntiAlias(true);
+    
+    if (style === 'stroke') {
+      paint.setStyle(this.CanvasKit.PaintStyle.Stroke);
+      paint.setStrokeWidth(strokeWidth);
+      
+      // Set stroke cap and join for better line quality
+      paint.setStrokeCap(this.CanvasKit.StrokeCap.Round);
+      paint.setStrokeJoin(this.CanvasKit.StrokeJoin.Round);
+    } else {
+      paint.setStyle(this.CanvasKit.PaintStyle.Fill);
+    }
+    
+    return paint;
+  }
+
+  // 자식 요소 중에서 그라디언트를 찾고 paint에 적용하는 함수
+  private applyGradientFromChildren(props: any, paint: Paint, bounds?: { x: number; y: number; width: number; height: number }): void {
+    if (!props || !props.children) return;
+    
+    
+    React.Children.forEach(props.children, (child) => {
+      if (!React.isValidElement(child)) return;
+      
+      const { type } = child;
+      const childProps = child.props as any;
+      
+
+      if (typeof type === 'string') {
+        if (type === 'skia-linear-gradient') {
+          this.applyLinearGradient(childProps, paint, bounds);
+        } else if (type === 'skia-radial-gradient') {
+          this.applyRadialGradient(childProps, paint, bounds);
+        }
+      } else if (typeof type === 'function') {
+        try {
+          let result;
+          
+          // 클래스 컴포넌트인지 함수형 컴포넌트인지 확인
+          if (type.prototype && type.prototype.isReactComponent) {
+            // 클래스 컴포넌트
+            const instance = new (type as any)(childProps);
+            result = instance.render();
+          } else {
+            // 함수형 컴포넌트
+            result = (type as any)(childProps);
+          }
+          
+          if (React.isValidElement(result)) {
+            if (result.type === 'skia-linear-gradient') {
+              this.applyLinearGradient(result.props as any, paint, bounds);
+            } else if (result.type === 'skia-radial-gradient') {
+              this.applyRadialGradient(result.props as any, paint, bounds);
+            }
+          }
+        } catch (error) {
+          console.log('❌ Error executing function component:', error);
+        }
+      }
+    });
+  }
+
+  private applyLinearGradient(gradientProps: any, paint: Paint, bounds?: { x: number; y: number; width: number; height: number }): void {
+    const { start, end, colors, positions, mode } = gradientProps;
+    
+    
+    if (!start || !end || !Array.isArray(colors)) {
+      console.error('❌ Invalid gradient props:', { start, end, colors });
+      return;
+    }
+    
+    try {
+      const colorArray = colors.map((color: string) => {
+        const parsed = this.CanvasKit.parseColorString(color);
+        return parsed;
+      });
+      
+      let tileMode = this.CanvasKit.TileMode.Clamp;
+      if (mode === 'repeat') tileMode = this.CanvasKit.TileMode.Repeat;
+      else if (mode === 'mirror') tileMode = this.CanvasKit.TileMode.Mirror;
+      else if (mode === 'decal') tileMode = this.CanvasKit.TileMode.Decal;
+      
+      // 좌표를 절대 좌표로 변환 (bounds가 있는 경우)
+      let gradientStart = [start.x, start.y];
+      let gradientEnd = [end.x, end.y];
+      
+      if (bounds) {
+        gradientStart = [bounds.x + start.x, bounds.y + start.y];
+        gradientEnd = [bounds.x + end.x, bounds.y + end.y];
+      }
+
+      
+      const shader = this.CanvasKit.Shader.MakeLinearGradient(
+        gradientStart,
+        gradientEnd,
+        colorArray,
+        positions || null,
+        tileMode
+      );
+      
+      if (shader) {
+        // Paint에서 기존 색상을 제거하고 Shader만 설정
+        paint.setShader(shader);
+        
+        // 중요: Shader 적용 후 색상을 다시 설정하지 않음
+        
+        // Shader는 Paint가 삭제될 때 함께 정리되므로 여기서는 delete하지 않음
+      } else {
+        console.error('❌ Failed to create shader');
+      }
+    } catch (error) {
+      console.error('❌ Error in applyLinearGradient:', error);
+    }
+  }
+
+  private applyRadialGradient(gradientProps: any, paint: Paint, _bounds?: { x: number; y: number; width: number; height: number }): void {
+    const { center, radius, colors, positions, mode } = gradientProps;
+    
+    if (!center || radius === undefined || !Array.isArray(colors)) {
+      return;
+    }
+    
+    const colorArray = colors.map((color: string) => this.CanvasKit.parseColorString(color));
+    
+    let tileMode = this.CanvasKit.TileMode.Clamp;
+    if (mode === 'repeat') tileMode = this.CanvasKit.TileMode.Repeat;
+    else if (mode === 'mirror') tileMode = this.CanvasKit.TileMode.Mirror;
+    else if (mode === 'decal') tileMode = this.CanvasKit.TileMode.Decal;
+    
+    // RadialGradient는 기존 방식대로 상대 좌표 사용
+    const shader = this.CanvasKit.Shader.MakeRadialGradient(
+      [center.x, center.y],
+      radius,
+      colorArray,
+      positions || null,
+      tileMode
+    );
+    
+    paint.setShader(shader);
+  }
+
   private renderRect(props: any, canvas: Canvas): void {
     const { x, y, width, height, color, style, strokeWidth } = props;
-    const paint = this.createPaint(color, style, strokeWidth);
+    
+    
+    // 그라디언트가 있는지 먼저 확인
+    const hasGradient = this.hasGradientChildren(props);
+    
+    
+    // 그라디언트가 있으면 기본 색상 없이 paint 생성, 없으면 기본 색상으로 생성
+    const paint = hasGradient ? this.createPaintWithoutColor(style, strokeWidth) : this.createPaint(color, style, strokeWidth);
+    
+    
+    // 자식 요소 중 그라디언트가 있다면 적용 (렌더링 좌표 전달)
+    if (hasGradient) {
+      this.applyGradientFromChildren(props, paint, { x, y, width, height });
+    }
     
     const rect = this.CanvasKit.XYWHRect(x, y, width, height);
     canvas.drawRect(rect, paint);
     
     paint.delete();
+    
+    // 자식 요소 렌더링 (그라디언트가 아닌 다른 요소들)
+    this.renderNonGradientChildren(props, canvas);
   }
 
   private renderCircle(props: any, canvas: Canvas): void {
     const { cx, cy, r, color, style, strokeWidth } = props;
-    const paint = this.createPaint(color, style, strokeWidth);
+    
+    // 그라디언트가 있는지 먼저 확인
+    const hasGradient = this.hasGradientChildren(props);
+    
+    // 그라디언트가 있으면 기본 색상 없이 paint 생성, 없으면 기본 색상으로 생성
+    const paint = hasGradient ? this.createPaintWithoutColor(style, strokeWidth) : this.createPaint(color, style, strokeWidth);
+    
+    // 자식 요소 중 그라디언트가 있다면 적용
+    if (hasGradient) {
+      this.applyGradientFromChildren(props, paint, { x: cx - r, y: cy - r, width: r * 2, height: r * 2 });
+    }
     
     canvas.drawCircle(cx, cy, r, paint);
     
     paint.delete();
+    
+    // 자식 요소 렌더링 (그라디언트가 아닌 다른 요소들)
+    this.renderNonGradientChildren(props, canvas);
   }
 
   private renderPath(props: any, canvas: Canvas): void {
     const { path, color, style, strokeWidth } = props;
     const paint = this.createPaint(color, style, strokeWidth);
+    
+    // 자식 요소 중 그라디언트가 있다면 적용
+    this.applyGradientFromChildren(props, paint);
     
     let skiaPath: Path | null;
     if (typeof path === 'string') {
@@ -148,13 +342,22 @@ export class SkiaRenderer {
     }
     
     paint.delete();
+    
+    // 자식 요소 렌더링 (그라디언트가 아닌 다른 요소들)
+    this.renderNonGradientChildren(props, canvas);
   }
 
   private renderText(props: any, canvas: Canvas): void {
     const { x, y, text, fontSize = 16, color = '#000000' } = props;
     
+    // TODO: 텍스트에 그라디언트 적용 기능 구현 예정
+    // 현재는 기본 색상으로만 렌더링
+    
     // 가장 간단하고 확실한 방법: Canvas 2D로 텍스트를 렌더링한 후 이미지로 변환
     this.renderTextAsImage(text, x, y, fontSize, color, canvas);
+    
+    // 자식 요소 렌더링 (그라디언트가 아닌 다른 요소들)
+    this.renderNonGradientChildren(props, canvas);
   }
   
   private renderTextAsImage(text: string, x: number, y: number, fontSize: number, color: string, skiaCanvas: Canvas): void {
@@ -592,59 +795,69 @@ export class SkiaRenderer {
     paint.delete();
   }
 
-  private renderWithLinearGradient(props: any, canvas: Canvas): void {
-    const { start, end, colors } = props;
-    
-    canvas.save();
-    
-    const paint = new this.CanvasKit.Paint();
-    const colorArray = colors.map((color: string) => this.CanvasKit.parseColorString(color));
-    
-    const shader = this.CanvasKit.Shader.MakeLinearGradient(
-      [start.x, start.y],
-      [end.x, end.y],
-      colorArray,
-      null,
-      this.CanvasKit.TileMode.Clamp
-    );
-    
-    paint.setShader(shader);
-    canvas.saveLayer(paint);
-    
-    if (props.children) {
-      this.render(props.children as ReactNode, canvas);
+  // 자식 요소 중에서 그라디언트가 있는지 확인하는 함수
+  private hasGradientChildren(props: any): boolean {
+    if (!props || !props.children) {
+      return false;
     }
     
-    canvas.restore();
-    paint.delete();
-    shader.delete();
+    let hasGradient = false;
+    React.Children.forEach(props.children, (child) => {
+      if (!React.isValidElement(child)) return;
+      
+      const { type } = child;
+      
+      if (typeof type === 'string') {
+        if (type === 'skia-linear-gradient' || type === 'skia-radial-gradient') {
+          hasGradient = true;
+        }
+      } else if (typeof type === 'function') {
+        // 함수형 컴포넌트인 경우 실행해서 결과를 확인
+        try {
+          let result;
+          
+          // 클래스 컴포넌트인지 함수형 컴포넌트인지 확인
+          if (type.prototype && type.prototype.isReactComponent) {
+            // 클래스 컴포넌트
+            const instance = new (type as any)(child.props);
+            result = instance.render();
+          } else {
+            // 함수형 컴포넌트
+            result = (type as any)(child.props);
+          }
+          
+          if (React.isValidElement(result)) {
+            if (result.type === 'skia-linear-gradient' || result.type === 'skia-radial-gradient') {
+              hasGradient = true;
+            }
+          }
+        } catch (error) {
+          console.log('❌ Error checking function component:', error);
+        }
+      }
+    });
+    
+    return hasGradient;
   }
 
-  private renderWithRadialGradient(props: any, canvas: Canvas): void {
-    const { center, radius, colors } = props;
+  // 그라디언트가 아닌 자식 요소들을 렌더링하는 함수
+  private renderNonGradientChildren(props: any, canvas: Canvas): void {
+    if (!props || !props.children) return;
     
-    canvas.save();
-    
-    const paint = new this.CanvasKit.Paint();
-    const colorArray = colors.map((color: string) => this.CanvasKit.parseColorString(color));
-    
-    const shader = this.CanvasKit.Shader.MakeRadialGradient(
-      [center.x, center.y],
-      radius,
-      colorArray,
-      null,
-      this.CanvasKit.TileMode.Clamp
-    );
-    
-    paint.setShader(shader);
-    canvas.saveLayer(paint);
-    
-    if (props.children) {
-      this.render(props.children as ReactNode, canvas);
-    }
-    
-    canvas.restore();
-    paint.delete();
-    shader.delete();
+    React.Children.forEach(props.children, (child) => {
+      if (!React.isValidElement(child)) return;
+      
+      const { type } = child;
+      
+      // 그라디언트가 아닌 요소들만 렌더링
+      if (typeof type === 'string' && 
+          type !== 'skia-linear-gradient' && 
+          type !== 'skia-radial-gradient') {
+        this.renderElement(child, canvas);
+      } else if (typeof type === 'function') {
+        // 함수형 컴포넌트는 렌더링
+        this.renderElement(child, canvas);
+      }
+    });
   }
 }

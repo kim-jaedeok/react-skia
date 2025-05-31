@@ -1,5 +1,4 @@
 import type { CanvasKit, Canvas as SkiaCanvas, Paint, Path, Image, Font, Surface } from 'canvaskit-wasm';
-import type { ReactNode } from 'react';
 
 export interface SkiaElement {
   type: string;
