@@ -1,11 +1,13 @@
-# React Skia Web
+# React Skia Web + React Native Reanimated Web Port
 
-React Native Skia를 웹 브라우저에서 사용할 수 있도록 포팅한 라이브러리입니다.
+React Native Skia를 웹 브라우저에서 사용할 수 있도록 포팅한 라이브러리와 React Native Reanimated의 완전한 웹 포팅 버전입니다.
 
 ## 🚀 주요 특징
 
 - **고성능 렌더링**: Google의 CanvasKit을 기반으로 한 하드웨어 가속 그래픽
 - **React Native 호환**: React Native Skia와 유사한 API 제공
+- **완전한 애니메이션 시스템**: React Native Reanimated 웹 포팅
+- **고급 애니메이션**: `withRepeat`, `withSequence`, `withSpring`, `withTiming` 지원
 - **TypeScript 지원**: 완전한 타입 안정성
 - **웹 최적화**: 브라우저 환경에 최적화된 구현
 
@@ -17,7 +19,7 @@ pnpm install
 
 ## 🎯 사용법
 
-### 기본 설정
+### 기본 Skia 그래픽
 
 ```tsx
 import { Circle, Rect, SkiaCanvas, SkiaProvider, Text } from "./skia";
@@ -35,6 +37,54 @@ function App() {
 }
 ```
 
+### React Reanimated 애니메이션
+
+```tsx
+import {
+  Easing,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "./react-reanimated";
+import { Circle, Group, SkiaCanvas } from "./skia";
+
+function AnimatedDemo() {
+  const translateX = useSharedValue(0);
+  const scale = useSharedValue(1);
+
+  React.useEffect(() => {
+    // 무한 반복 애니메이션
+    translateX.value = withRepeat(
+      withSequence(
+        withTiming(200, { duration: 2000, easing: Easing.inOut(Easing.quad) }),
+        withTiming(0, { duration: 2000, easing: Easing.inOut(Easing.quad) }),
+      ),
+      -1,
+      false,
+    );
+
+    // 크기 변화 애니메이션
+    scale.value = withRepeat(
+      withSequence(
+        withTiming(1.5, { duration: 1000, easing: Easing.bounce }),
+        withTiming(1, { duration: 1000, easing: Easing.bounce }),
+      ),
+      -1,
+      false,
+    );
+  }, []);
+
+  return (
+    <SkiaCanvas width={350} height={200}>
+      <Group transform={[scale.value, 0, 0, scale.value, translateX.value, 0]}>
+        <Circle cx={50} cy={50} r={25} color="#FF6B6B" />
+      </Group>
+    </SkiaCanvas>
+  );
+}
+```
+
 ## 🛠 개발
 
 ```bash
@@ -47,22 +97,55 @@ pnpm build
 
 ## 🎨 구현된 기능
 
-- ✅ 기본 도형 렌더링 (Rect, Circle)
-- ✅ 텍스트 렌더링
+### Skia 그래픽 시스템
+
+- ✅ 기본 도형 렌더링 (Rect, Circle, Path)
+- ✅ 텍스트 렌더링 및 폰트 지원
 - ✅ 패스 그리기 (SVG 호환)
-- ✅ 그룹화 및 투명도
-- ✅ TypeScript 타입 지원
-- 🚧 이미지 로딩 (구현 예정)
-- 🚧 애니메이션 (구현 예정)
+- ✅ 그라디언트 (Linear, Radial)
+- ✅ 그룹화 및 투명도 제어
+- ✅ 변형 행렬 (Transform Matrix)
+- ✅ 이미지 렌더링
+- ✅ 블러 및 색상 필터
 
-Currently, two official plugins are available:
+### React Native Reanimated 웹 포트
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ `useSharedValue` - 반응형 애니메이션 값
+- ✅ `useDerivedValue` - 계산된 값
+- ✅ `useAnimatedStyle` - 애니메이션 스타일
+- ✅ `withTiming` - 시간 기반 애니메이션
+- ✅ `withSpring` - 스프링 물리 애니메이션
+- ✅ `withRepeat` - 반복 애니메이션 (무한/유한)
+- ✅ `withSequence` - 순차 애니메이션
+- ✅ `withDelay` - 지연 애니메이션
+- ✅ Easing 함수 라이브러리 (베지어, 탄성, 바운스 등)
+- ✅ Worklet 시스템 (`runOnJS`, `runOnUI`)
+- ✅ 애니메이션 취소 및 상태 관리
 
-## Expanding the ESLint configuration
+### 데모 애니메이션
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🎯 궤도 애니메이션 (회전 + 크기 변화)
+- ⚽ 스프링 물리 시뮬레이션
+- 🌊 웨이브 애니메이션 (sin 함수 기반)
+- ✨ 파티클 시스템 (방사형 폭발)
+- 🔘 인터랙티브 버튼
+- 🕒 실시간 시계 애니메이션
+- ⏳ 로딩 스피너 컬렉션
+- 🎯 물리 진자 시뮬레이션
+- 🌍 중력 낙하 시뮬레이션
+- ⚙️ 기어 시스템 애니메이션
+
+## 🚀 성능 특징
+
+- **하드웨어 가속**: CanvasKit 기반 GPU 렌더링
+- **60FPS 애니메이션**: `requestAnimationFrame` 기반 최적화
+- **메모리 효율성**: 자동 리스너 정리 및 애니메이션 취소
+- **타입 안전성**: 완전한 TypeScript 지원
+- **React 19 호환**: 최신 React 기능 지원
+
+## 📱 모바일 호환성
+
+React Native와 동일한 API를 제공하므로, 웹에서 개발한 애니메이션을 모바일 앱에서도 동일하게 사용할 수 있습니다.
 
 ```js
 export default tseslint.config({

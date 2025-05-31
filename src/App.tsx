@@ -1,9 +1,18 @@
 import React from "react";
 
 import "./App.css";
+import { AdvancedAnimations } from "./components/AdvancedAnimations";
+import { InteractiveAnimations } from "./components/InteractiveAnimations";
+import { PhysicsAnimations } from "./components/PhysicsAnimations";
+import {
+  Easing as ReanimatedEasing,
+  useSharedValue as useReanimatedSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "./react-reanimated";
 import {
   Circle,
-  Easing,
   Group,
   Image,
   LinearGradient,
@@ -13,7 +22,6 @@ import {
   SkiaCanvas,
   SkiaProvider,
   Text,
-  useSharedValue,
 } from "./skia";
 
 // 애니메이션 데모 컴포넌트
@@ -33,23 +41,34 @@ function AnimatedCircle({
 
 // 애니메이션 로직을 관리하는 컨테이너 컴포넌트
 function AnimatedDemo() {
-  const translateX = useSharedValue(0);
-  const scale = useSharedValue(1);
+  const translateX = useReanimatedSharedValue(0);
+  const scale = useReanimatedSharedValue(1);
 
   React.useEffect(() => {
-    const animate = () => {
-      translateX.withTiming(200, { duration: 2000, easing: Easing.easeInOut });
-      scale.withTiming(1.5, { duration: 1000, easing: Easing.bounce });
+    // withRepeat를 사용한 무한 반복 애니메이션
+    translateX.value = withRepeat(
+      withSequence(
+        withTiming(200, {
+          duration: 2000,
+          easing: ReanimatedEasing.inOut(ReanimatedEasing.quad),
+        }),
+        withTiming(0, {
+          duration: 2000,
+          easing: ReanimatedEasing.inOut(ReanimatedEasing.quad),
+        }),
+      ),
+      -1, // 무한 반복
+      false, // reverse하지 않음 (시퀀스가 이미 왕복을 처리)
+    );
 
-      setTimeout(() => {
-        translateX.withTiming(0, { duration: 2000, easing: Easing.easeInOut });
-        scale.withTiming(1, { duration: 1000, easing: Easing.bounce });
-      }, 2000);
-    };
-
-    animate();
-    const interval = setInterval(animate, 4000);
-    return () => clearInterval(interval);
+    scale.value = withRepeat(
+      withSequence(
+        withTiming(1.5, { duration: 1000, easing: ReanimatedEasing.bounce }),
+        withTiming(1, { duration: 1000, easing: ReanimatedEasing.bounce }),
+      ),
+      -1, // 무한 반복
+      false,
+    );
   }, [translateX, scale]);
 
   return (
@@ -753,6 +772,21 @@ function App() {
             <p style={{ fontSize: "14px" }}>
               Built with ❤️ using React 19, TypeScript, CanvasKit & Vite
             </p>
+          </div>
+
+          {/* 고급 애니메이션 섹션 */}
+          <div style={{ marginTop: "40px" }}>
+            <AdvancedAnimations />
+          </div>
+
+          {/* 인터랙티브 애니메이션 섹션 */}
+          <div style={{ marginTop: "40px" }}>
+            <InteractiveAnimations />
+          </div>
+
+          {/* 물리 기반 애니메이션 섹션 */}
+          <div style={{ marginTop: "40px" }}>
+            <PhysicsAnimations />
           </div>
         </div>
       </SkiaProvider>

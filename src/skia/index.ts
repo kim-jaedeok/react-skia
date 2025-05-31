@@ -2,7 +2,6 @@
 export { SkiaCanvas } from "./components/SkiaCanvas";
 export { SkiaProvider, useSkia } from "./providers/SkiaProvider";
 export { useDraw } from "./hooks/useDraw";
-export { useSharedValue, Easing } from "./hooks/useSharedValue";
 
 // Skia components
 export { Group } from "./components/Group";
