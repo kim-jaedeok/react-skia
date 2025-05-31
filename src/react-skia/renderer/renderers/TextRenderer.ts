@@ -121,7 +121,7 @@ export class TextRenderer implements Renderer {
         throw new Error("Failed to create Skia image from text");
       }
     } catch (error) {
-      console.error("❌ Text rendering failed:", error);
+      console.error("Text rendering failed:", error);
 
       // Fallback: draw a simple rectangle placeholder
       try {
@@ -135,7 +135,7 @@ export class TextRenderer implements Renderer {
         skiaCanvas.drawRect(rect, paint);
         paint.delete();
       } catch (fallbackError) {
-        console.error("❌ Even fallback rect failed:", fallbackError);
+        console.error("Even fallback rect failed:", fallbackError);
       }
     }
   }

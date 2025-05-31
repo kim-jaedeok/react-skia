@@ -43,7 +43,7 @@ export function SkiaCanvas({
     // Create surface using modern API with high-DPI support
     const surface = CanvasKit.MakeSWCanvasSurface(canvasElement);
     if (!surface) {
-      console.log("❌ Failed to create surface");
+      console.error("Failed to create surface");
       return;
     }
 
@@ -60,7 +60,7 @@ export function SkiaCanvas({
       const renderer = new SkiaRenderer(CanvasKit);
       renderer.render(children, canvas);
     } else {
-      console.log("🚫 No children to render");
+      console.error("No children to render");
     }
 
     surface.flush();

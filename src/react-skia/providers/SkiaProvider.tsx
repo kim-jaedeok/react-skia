@@ -25,7 +25,7 @@ export function SkiaProvider({ children }: SkiaProviderProps) {
         const ck = await Skia.init();
         setCanvasKit(ck);
       } catch (error) {
-        console.error("❌ Failed to initialize CanvasKit:", error);
+        console.error("Failed to initialize CanvasKit:", error);
       }
     };
 

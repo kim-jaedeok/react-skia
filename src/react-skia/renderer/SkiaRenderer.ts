@@ -61,7 +61,7 @@ export class SkiaRenderer {
       if (isValidElement(child)) {
         this.renderReactElement(child, canvas);
       } else {
-        console.log("❌ Invalid React element:", child);
+        console.error("Invalid React element:", child);
       }
     });
   }
@@ -114,15 +114,15 @@ export class SkiaRenderer {
         if (isValidElement(result)) {
           this.renderReactElement(result, canvas);
         } else {
-          console.log(
-            "❌ Component function did not return a valid React element",
+          console.error(
+            " Component function did not return a valid React element",
           );
         }
       } catch (error) {
-        console.error("❌ Error calling component function:", error);
+        console.error("Error calling component function:", error);
       }
     } else {
-      console.log("❓ Unknown type:", typeof type, type);
+      console.error("Unknown type:", typeof type, type);
     }
 
     // 특정 요소들은 자체적으로 자식을 처리하므로 여기서는 제외

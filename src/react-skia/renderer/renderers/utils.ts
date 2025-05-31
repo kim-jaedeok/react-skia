@@ -119,7 +119,7 @@ export class RenderUtils {
             }
           }
         } catch (error) {
-          console.log("❌ Error checking function component:", error);
+          console.error("Error checking function component:", error);
         }
       }
     });
@@ -170,7 +170,7 @@ export class RenderUtils {
             }
           }
         } catch (error) {
-          console.log("❌ Error executing function component:", error);
+          console.error("Error executing function component:", error);
         }
       }
     });
@@ -187,7 +187,7 @@ export class RenderUtils {
     const { start, end, colors, positions, mode } = gradientProps;
 
     if (!start || !end || !Array.isArray(colors)) {
-      console.error("❌ Invalid gradient props:", { start, end, colors });
+      console.error("Invalid gradient props:", { start, end, colors });
       return;
     }
 
@@ -222,10 +222,10 @@ export class RenderUtils {
       if (shader) {
         paint.setShader(shader);
       } else {
-        console.error("❌ Failed to create shader");
+        console.error("Failed to create shader");
       }
     } catch (error) {
-      console.error("❌ Error in applyLinearGradient:", error);
+      console.error("Error in applyLinearGradient:", error);
     }
   }
 

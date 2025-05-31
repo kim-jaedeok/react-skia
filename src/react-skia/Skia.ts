@@ -43,7 +43,7 @@ class SkiaInstance {
         this.canvasKit = canvasKit;
         return canvasKit;
       } catch (error) {
-        console.error("❌ Failed to initialize CanvasKit:", error);
+        console.error("Failed to initialize CanvasKit:", error);
         this.initPromise = null;
         throw error;
       }
