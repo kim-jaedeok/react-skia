@@ -17,7 +17,22 @@ import {
 } from "./skia";
 
 // 애니메이션 데모 컴포넌트
-function AnimatedCircle() {
+function AnimatedCircle({
+  translateX,
+  scale,
+}: {
+  translateX: number;
+  scale: number;
+}) {
+  return (
+    <Group transform={[scale, 0, 0, scale, translateX, 0]}>
+      <Circle cx={50} cy={50} r={25} color="#FF6B6B" />
+    </Group>
+  );
+}
+
+// 애니메이션 로직을 관리하는 컨테이너 컴포넌트
+function AnimatedDemo() {
   const translateX = useSharedValue(0);
   const scale = useSharedValue(1);
 
@@ -38,9 +53,31 @@ function AnimatedCircle() {
   }, [translateX, scale]);
 
   return (
-    <Group transform={[scale.value, 0, 0, scale.value, translateX.value, 0]}>
-      <Circle cx={50} cy={50} r={25} color="#FF6B6B" />
-    </Group>
+    <SkiaCanvas width={350} height={200}>
+      <AnimatedCircle translateX={translateX.value} scale={scale.value} />
+      <Circle
+        cx={50}
+        cy={50}
+        r={25}
+        color="#E8E8E8"
+        style="stroke"
+        strokeWidth={2}
+      />
+      <Text
+        x={10}
+        y={120}
+        text="이동 + 크기 애니메이션"
+        fontSize={14}
+        color="#666"
+      />
+      <Text
+        x={10}
+        y={140}
+        text="React Native Skia 스타일"
+        fontSize={12}
+        color="#999"
+      />
+    </SkiaCanvas>
   );
 }
 
@@ -148,31 +185,7 @@ function App() {
             {/* Animation Demo */}
             <div>
               <h3>⚡ 애니메이션</h3>
-              <SkiaCanvas width={350} height={200}>
-                <AnimatedCircle />
-                <Circle
-                  cx={50}
-                  cy={50}
-                  r={25}
-                  color="#E8E8E8"
-                  style="stroke"
-                  strokeWidth={2}
-                />
-                <Text
-                  x={10}
-                  y={120}
-                  text="이동 + 크기 애니메이션"
-                  fontSize={14}
-                  color="#666"
-                />
-                <Text
-                  x={10}
-                  y={140}
-                  text="React Native Skia 스타일"
-                  fontSize={12}
-                  color="#999"
-                />
-              </SkiaCanvas>
+              <AnimatedDemo />
             </div>
 
             {/* Group and Opacity */}
