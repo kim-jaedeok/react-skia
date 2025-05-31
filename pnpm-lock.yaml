@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@types/canvaskit-wasm':
-        specifier: ^0.18.0
-        version: 0.18.5
-      '@types/offscreencanvas':
-        specifier: ^2019.7.3
-        version: 2019.7.3
       canvaskit-wasm:
         specifier: ^0.40.0
         version: 0.40.0
@@ -518,18 +512,11 @@ packages:
   '@types/babel__traverse@7.20.7':
     resolution: {integrity: sha512-dkO5fhS7+/oos4ciWxyEyjWe48zmG6wbCheo/G2ZnHx4fs3EU6YC6UM8rk56gAjNJ9P3MTH2jo5jb92/K6wbng==}
 
-  '@types/canvaskit-wasm@0.18.5':
-    resolution: {integrity: sha512-i1gwfb1qubv/JAguayvcxIzjGQy3LbRZ1Q7ym8L8WHyC5ZP+2jpCiHTY/d+FR62wTjtosWdmy/3LaQDt0WFiHA==}
-    deprecated: This is a stub types definition. canvaskit-wasm provides its own type definitions, so you do not need this installed.
-
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
-
-  '@types/offscreencanvas@2019.7.3':
-    resolution: {integrity: sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==}
 
   '@types/react-dom@19.1.5':
     resolution: {integrity: sha512-CMCjrWucUBZvohgZxkjd6S9h0nZxXjzus6yDfUb+xLxYM7VvjKNH1tQrE9GWLql1XoOP4/Ds3bwFqShHUYraGg==}
@@ -1530,15 +1517,9 @@ snapshots:
     dependencies:
       '@babel/types': 7.27.3
 
-  '@types/canvaskit-wasm@0.18.5':
-    dependencies:
-      canvaskit-wasm: 0.40.0
-
   '@types/estree@1.0.7': {}
 
   '@types/json-schema@7.0.15': {}
-
-  '@types/offscreencanvas@2019.7.3': {}
 
   '@types/react-dom@19.1.5(@types/react@19.1.6)':
     dependencies:

@@ -12,8 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/canvaskit-wasm": "^0.18.0",
-    "@types/offscreencanvas": "^2019.7.3",
     "canvaskit-wasm": "^0.40.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
