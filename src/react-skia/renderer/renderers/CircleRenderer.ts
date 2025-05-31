@@ -1,0 +1,37 @@
+import type { RenderProps, Renderer, RendererContext } from "./types";
+import { RenderUtils } from "./utils";
+
+export class CircleRenderer implements Renderer {
+  private utils: RenderUtils;
+
+  constructor(utils: RenderUtils) {
+    this.utils = utils;
+  }
+
+  render(props: RenderProps, context: RendererContext): void {
+    const { cx, cy, r, color, style, strokeWidth } = props;
+    const { canvas } = context;
+
+    // Check if gradient exists first
+    const hasGradient = this.utils.hasGradientChildren(props);
+
+    // Create paint with or without default color based on gradient presence
+    const paint = hasGradient
+      ? this.utils.createPaintWithoutColor({ style, strokeWidth })
+      : this.utils.createPaint({ color, style, strokeWidth });
+
+    // Apply gradient if exists
+    if (hasGradient) {
+      this.utils.applyGradientFromChildren(props, paint, {
+        x: cx - r,
+        y: cy - r,
+        width: r * 2,
+        height: r * 2,
+      });
+    }
+
+    canvas.drawCircle(cx, cy, r, paint);
+
+    paint.delete();
+  }
+}
