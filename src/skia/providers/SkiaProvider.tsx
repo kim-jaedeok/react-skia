@@ -1,8 +1,10 @@
-import  { createContext, useContext, useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { CanvasKit } from 'canvaskit-wasm';
-import { Skia } from '../Skia';
-import type { SkiaContextValue } from '../types';
+import { createContext, useContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+
+import type { CanvasKit } from "canvaskit-wasm";
+
+import { Skia } from "../Skia";
+import type { SkiaContextValue } from "../types";
 
 const SkiaContext = createContext<SkiaContextValue>({
   CanvasKit: null,
@@ -23,7 +25,7 @@ export function SkiaProvider({ children }: SkiaProviderProps) {
         const ck = await Skia.init();
         setCanvasKit(ck);
       } catch (error) {
-        console.error('❌ Failed to initialize CanvasKit:', error);
+        console.error("❌ Failed to initialize CanvasKit:", error);
       }
     };
 
@@ -37,16 +39,14 @@ export function SkiaProvider({ children }: SkiaProviderProps) {
   };
 
   return (
-    <SkiaContext.Provider value={contextValue}>
-      {children}
-    </SkiaContext.Provider>
+    <SkiaContext.Provider value={contextValue}>{children}</SkiaContext.Provider>
   );
 }
 
 export function useSkia(): SkiaContextValue {
   const context = useContext(SkiaContext);
   if (!context) {
-    throw new Error('useSkia must be used within a SkiaProvider');
+    throw new Error("useSkia must be used within a SkiaProvider");
   }
   return context;
 }

@@ -1,4 +1,12 @@
-import type { CanvasKit, Canvas as SkiaCanvas, Paint, Path, Image, Font, Surface } from 'canvaskit-wasm';
+import type {
+  CanvasKit,
+  Font,
+  Image,
+  Paint,
+  Path,
+  Canvas as SkiaCanvas,
+  Surface,
+} from "canvaskit-wasm";
 
 export interface SkiaElement {
   type: string;
@@ -46,7 +54,7 @@ export interface RectProps {
   height: number;
   color?: string;
   strokeWidth?: number;
-  style?: 'fill' | 'stroke';
+  style?: "fill" | "stroke";
 }
 
 export interface CircleProps {
@@ -55,14 +63,14 @@ export interface CircleProps {
   r: number;
   color?: string;
   strokeWidth?: number;
-  style?: 'fill' | 'stroke';
+  style?: "fill" | "stroke";
 }
 
 export interface PathProps {
   path: string | SkiaPath;
   color?: string;
   strokeWidth?: number;
-  style?: 'fill' | 'stroke';
+  style?: "fill" | "stroke";
 }
 
 export interface TextProps {
@@ -96,6 +104,6 @@ export interface ImageProps {
   width: number;
   height: number;
   src: string;
-  fit?: 'fill' | 'contain' | 'cover' | 'none';
+  fit?: "fill" | "contain" | "cover" | "none";
   opacity?: number;
 }

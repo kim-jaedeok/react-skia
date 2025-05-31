@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
-import { SkiaCanvas, Circle, Group, Text } from '../skia';
-import { useSharedValue, Easing } from '../skia/hooks/useSharedValue';
+import { useEffect } from "react";
+
+import { Circle, Group, SkiaCanvas, Text } from "../skia";
+import { Easing, useSharedValue } from "../skia/hooks/useSharedValue";
 
 export function AnimatedDemo() {
   const translateX = useSharedValue(0);
@@ -11,53 +12,53 @@ export function AnimatedDemo() {
   useEffect(() => {
     // Continuous translation animation
     const animateTranslation = () => {
-      translateX.withTiming(200, { 
-        duration: 2000, 
-        easing: Easing.easeInOut 
+      translateX.withTiming(200, {
+        duration: 2000,
+        easing: Easing.easeInOut,
       });
-      
+
       setTimeout(() => {
-        translateX.withTiming(0, { 
-          duration: 2000, 
-          easing: Easing.easeInOut 
+        translateX.withTiming(0, {
+          duration: 2000,
+          easing: Easing.easeInOut,
         });
       }, 2000);
     };
 
     // Scale animation
     const animateScale = () => {
-      scale.withTiming(1.5, { 
-        duration: 1000, 
-        easing: Easing.bounce 
+      scale.withTiming(1.5, {
+        duration: 1000,
+        easing: Easing.bounce,
       });
-      
+
       setTimeout(() => {
-        scale.withTiming(1, { 
-          duration: 1000, 
-          easing: Easing.bounce 
+        scale.withTiming(1, {
+          duration: 1000,
+          easing: Easing.bounce,
         });
       }, 1000);
     };
 
     // Rotation animation
     const animateRotation = () => {
-      rotation.withTiming(360, { 
-        duration: 3000, 
-        easing: Easing.linear 
+      rotation.withTiming(360, {
+        duration: 3000,
+        easing: Easing.linear,
       });
     };
 
     // Opacity animation
     const animateOpacity = () => {
-      opacity.withTiming(0.3, { 
-        duration: 1500, 
-        easing: Easing.easeInOut 
+      opacity.withTiming(0.3, {
+        duration: 1500,
+        easing: Easing.easeInOut,
       });
-      
+
       setTimeout(() => {
-        opacity.withTiming(1, { 
-          duration: 1500, 
-          easing: Easing.easeInOut 
+        opacity.withTiming(1, {
+          duration: 1500,
+          easing: Easing.easeInOut,
         });
       }, 1500);
     };
@@ -84,7 +85,7 @@ export function AnimatedDemo() {
       <h3>애니메이션 데모</h3>
       <SkiaCanvas width={400} height={200}>
         {/* Animated Circle */}
-        <Group 
+        <Group
           transform={[scale.value, 0, 0, scale.value, translateX.value, 0]}
           opacity={opacity.value}
         >
@@ -92,11 +93,24 @@ export function AnimatedDemo() {
         </Group>
 
         {/* Static reference circle */}
-        <Circle cx={50} cy={100} r={30} color="#E8E8E8" style="stroke" strokeWidth={2} />
-        
+        <Circle
+          cx={50}
+          cy={100}
+          r={30}
+          color="#E8E8E8"
+          style="stroke"
+          strokeWidth={2}
+        />
+
         {/* Animation labels */}
         <Text x={10} y={30} text="애니메이션:" fontSize={14} color="#333" />
-        <Text x={10} y={50} text="• 이동, 크기, 투명도" fontSize={12} color="#666" />
+        <Text
+          x={10}
+          y={50}
+          text="• 이동, 크기, 투명도"
+          fontSize={12}
+          color="#666"
+        />
       </SkiaCanvas>
     </div>
   );

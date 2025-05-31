@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 export interface AnimationConfig {
   duration: number;
@@ -11,7 +11,10 @@ export function useSharedValue(initialValue: number) {
   const [value, setValue] = useState(initialValue);
   const animationRef = useRef<number | null>(null);
 
-  const withTiming = (toValue: number, config: AnimationConfig = { duration: 300 }) => {
+  const withTiming = (
+    toValue: number,
+    config: AnimationConfig = { duration: 300 },
+  ) => {
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
@@ -23,7 +26,7 @@ export function useSharedValue(initialValue: number) {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const easedProgress = easing(progress);
-      
+
       const currentValue = value + (toValue - value) * easedProgress;
       setValue(currentValue);
 
@@ -36,7 +39,7 @@ export function useSharedValue(initialValue: number) {
           const loopElapsed = Date.now() - newStartTime;
           const loopProgress = Math.min(loopElapsed / duration, 1);
           const loopEasedProgress = easing(loopProgress);
-          
+
           const loopValue = toValue + (value - toValue) * loopEasedProgress;
           setValue(loopValue);
 
@@ -52,10 +55,16 @@ export function useSharedValue(initialValue: number) {
     };
 
     animationRef.current = requestAnimationFrame(animate);
-    return { cancel: () => animationRef.current && cancelAnimationFrame(animationRef.current) };
+    return {
+      cancel: () =>
+        animationRef.current && cancelAnimationFrame(animationRef.current),
+    };
   };
 
-  const withSpring = (toValue: number, config: { stiffness?: number; damping?: number } = {}) => {
+  const withSpring = (
+    toValue: number,
+    config: { stiffness?: number; damping?: number } = {},
+  ) => {
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
@@ -67,10 +76,10 @@ export function useSharedValue(initialValue: number) {
       const displacement = value - toValue;
       const springForce = -stiffness * displacement;
       const dampingForce = -damping * velocity;
-      
+
       velocity += (springForce + dampingForce) * 0.016; // Assuming 60fps
       const newValue = value + velocity * 0.016;
-      
+
       setValue(newValue);
 
       // Continue animation if there's still significant motion
@@ -80,7 +89,10 @@ export function useSharedValue(initialValue: number) {
     };
 
     animationRef.current = requestAnimationFrame(animate);
-    return { cancel: () => animationRef.current && cancelAnimationFrame(animationRef.current) };
+    return {
+      cancel: () =>
+        animationRef.current && cancelAnimationFrame(animationRef.current),
+    };
   };
 
   useEffect(() => {
@@ -104,7 +116,7 @@ export const Easing = {
   ease: (t: number) => t * t * (3 - 2 * t),
   easeIn: (t: number) => t * t,
   easeOut: (t: number) => 1 - (1 - t) * (1 - t),
-  easeInOut: (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+  easeInOut: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
   bounce: (t: number) => {
     if (t < 1 / 2.75) {
       return 7.5625 * t * t;
