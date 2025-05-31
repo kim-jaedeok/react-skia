@@ -1,16 +1,12 @@
 import React from "react";
 
-import "./App.css";
-import { AdvancedAnimations } from "./components/AdvancedAnimations";
-import { InteractiveAnimations } from "./components/InteractiveAnimations";
-import { PhysicsAnimations } from "./components/PhysicsAnimations";
 import {
   Easing as ReanimatedEasing,
   useSharedValue as useReanimatedSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "./react-reanimated";
+} from "../react-reanimated";
 import {
   Circle,
   Group,
@@ -22,7 +18,11 @@ import {
   SkiaCanvas,
   SkiaProvider,
   Text,
-} from "./react-skia";
+} from "../react-skia";
+import "./App.css";
+import { AdvancedAnimations } from "./components/AdvancedAnimations";
+import { InteractiveAnimations } from "./components/InteractiveAnimations";
+import { PhysicsAnimations } from "./components/PhysicsAnimations";
 
 // 애니메이션 데모 컴포넌트
 function AnimatedCircle({

@@ -7,8 +7,8 @@ import {
   withRepeat,
   withSequence,
   withTiming,
-} from "../react-reanimated";
-import { Circle, Group, Path, Rect, SkiaCanvas, Text } from "../react-skia";
+} from "../../react-reanimated";
+import { Circle, Group, Path, Rect, SkiaCanvas, Text } from "../../react-skia";
 
 // 인터랙티브 버튼 컴포넌트 (간단 버전)
 function InteractiveButton() {

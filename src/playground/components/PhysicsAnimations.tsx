@@ -8,8 +8,8 @@ import {
   withSequence,
   withSpring,
   withTiming,
-} from "../react-reanimated";
-import { Circle, Group, Path, Rect, SkiaCanvas, Text } from "../react-skia";
+} from "../../react-reanimated";
+import { Circle, Group, Path, Rect, SkiaCanvas, Text } from "../../react-skia";
 
 // 물리 기반 진자 시뮬레이션
 function PendulumSimulation() {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import { Circle, Group, SkiaCanvas, Text } from "../react-skia";
-import { Easing, useSharedValue } from "../react-skia/hooks/useSharedValue";
+import { Circle, Group, SkiaCanvas, Text } from "../../react-skia";
+import { Easing, useSharedValue } from "../../react-skia/hooks/useSharedValue";
 
 export function AnimatedDemo() {
   const translateX = useSharedValue(0);
