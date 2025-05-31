@@ -139,4 +139,13 @@ export class TextRenderer implements Renderer {
       }
     }
   }
+
+  /**
+   * Clean up resources
+   * TextRenderer doesn't hold persistent resources, cleanup is handled per-render
+   */
+  cleanup(): void {
+    // No persistent resources to clean up
+    // All paint, font, and image objects are cleaned up immediately after use in render methods
+  }
 }

@@ -35,4 +35,13 @@ export class RectRenderer implements Renderer {
 
     paint.delete();
   }
+
+  /**
+   * Clean up resources
+   * RectRenderer doesn't hold persistent resources, cleanup is handled per-render
+   */
+  cleanup(): void {
+    // No persistent resources to clean up
+    // Paint objects are cleaned up immediately after use in render method
+  }
 }

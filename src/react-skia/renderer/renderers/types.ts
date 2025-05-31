@@ -23,6 +23,7 @@ export interface Bounds {
 // Base interface for all renderers
 export interface Renderer {
   render(props: RenderProps, context: RendererContext): void;
+  cleanup(): void;
 }
 
 // Paint creation options

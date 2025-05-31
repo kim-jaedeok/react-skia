@@ -21,6 +21,7 @@ export function SkiaCanvas({
 }: SkiaCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const surfaceRef = useRef<Surface | null>(null);
+  const rendererRef = useRef<SkiaRenderer | null>(null);
   const { CanvasKit } = useSkia();
 
   useEffect(() => {
@@ -49,6 +50,10 @@ export function SkiaCanvas({
 
     surfaceRef.current = surface;
 
+    // Create renderer instance and store reference for cleanup
+    const renderer = new SkiaRenderer(CanvasKit);
+    rendererRef.current = renderer;
+
     // Render children
     const canvas = surface.getCanvas();
 
@@ -57,7 +62,6 @@ export function SkiaCanvas({
     canvas.clear(CanvasKit.WHITE);
 
     if (children) {
-      const renderer = new SkiaRenderer(CanvasKit);
       renderer.render(children, canvas);
     } else {
       console.error("No children to render");
@@ -66,6 +70,16 @@ export function SkiaCanvas({
     surface.flush();
 
     return () => {
+      // Clean up renderer first
+      if (rendererRef.current) {
+        // Call cleanup method if renderer has one
+        if (typeof rendererRef.current.cleanup === "function") {
+          rendererRef.current.cleanup();
+        }
+        rendererRef.current = null;
+      }
+
+      // Clean up surface
       if (surfaceRef.current) {
         surfaceRef.current.delete();
         surfaceRef.current = null;

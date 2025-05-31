@@ -139,13 +139,14 @@ export function startTimingAnimation(
   duration: number,
   easing: EasingFunction,
   callback?: AnimationCallback,
-): void {
+): () => void {
   // Cancel any existing animation
   cancelAnimation(sharedValue);
 
   const startTime = performance.now();
   const startValue = sharedValue.value;
   const id = animationId++;
+  let animationFrameId: number;
 
   const animationState: AnimationState = {
     id,
@@ -177,7 +178,7 @@ export function startTimingAnimation(
     }
 
     if (progress < 1) {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     } else {
       animationState.finished = true;
       activeAnimations.delete(sharedValue);
@@ -193,7 +194,15 @@ export function startTimingAnimation(
     }
   };
 
-  requestAnimationFrame(animate);
+  animationFrameId = requestAnimationFrame(animate);
+
+  // Return cleanup function
+  return () => {
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+    cancelAnimation(sharedValue);
+  };
 }
 
 /**
@@ -204,7 +213,7 @@ export function startSpringAnimation(
   toValue: number,
   config: WithSpringConfig,
   callback?: AnimationCallback,
-): void {
+): () => void {
   // Cancel any existing animation
   cancelAnimation(sharedValue);
 
@@ -218,6 +227,7 @@ export function startSpringAnimation(
 
   const startTime = performance.now();
   const id = animationId++;
+  let animationFrameId: number;
 
   let lastTime = startTime;
   let velocity = 0;
@@ -264,7 +274,7 @@ export function startSpringAnimation(
       Math.abs(displacement) > restDisplacementThreshold;
 
     if (hasSignificantMotion) {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     } else {
       // Snap to final value
       if (sharedValue._internalSetValue) {
@@ -286,5 +296,13 @@ export function startSpringAnimation(
     }
   };
 
-  requestAnimationFrame(animate);
+  animationFrameId = requestAnimationFrame(animate);
+
+  // Return cleanup function
+  return () => {
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+    cancelAnimation(sharedValue);
+  };
 }

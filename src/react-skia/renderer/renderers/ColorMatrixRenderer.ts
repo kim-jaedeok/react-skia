@@ -29,4 +29,13 @@ export class ColorMatrixRenderer implements Renderer {
     paint.delete();
     filter.delete();
   }
+
+  /**
+   * Clean up resources
+   * ColorMatrixRenderer doesn't hold persistent resources, cleanup is handled per-render
+   */
+  cleanup(): void {
+    // No persistent resources to clean up
+    // Paint and filter objects are cleaned up immediately after use in render method
+  }
 }

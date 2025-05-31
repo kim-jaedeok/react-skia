@@ -221,6 +221,8 @@ export class RenderUtils {
 
       if (shader) {
         paint.setShader(shader);
+        // Clean up shader immediately after setting it to paint
+        shader.delete();
       } else {
         console.error("Failed to create shader");
       }
@@ -262,6 +264,8 @@ export class RenderUtils {
     );
 
     paint.setShader(shader);
+    // Clean up shader immediately after setting it to paint
+    shader.delete();
   }
 
   /**
@@ -290,5 +294,16 @@ export class RenderUtils {
         renderElementFn(child);
       }
     });
+  }
+
+  /**
+   * Clean up resources and references
+   */
+  cleanup(): void {
+    // Clear any cached objects or references if they exist in the future
+    // This method ensures proper cleanup of native resources
+    // Note: Individual Paint, Shader, and other CanvasKit objects
+    // should be cleaned up immediately after use in their respective methods
+    // This cleanup is for any persistent references or caches
   }
 }

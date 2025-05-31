@@ -1,6 +1,6 @@
 // useSharedValue hook for React Native Reanimated Web Port
 // Core hook that manages animated values
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { startSpringAnimation, startTimingAnimation } from "../animations";
 import type { SharedValue } from "../types";
@@ -15,12 +15,30 @@ export function useSharedValue<T = number>(initialValue: T): SharedValue<T> {
   const listenersRef = useRef<Map<string, (value: T) => void>>(new Map());
   const listenerIdRef = useRef(0);
   const isAnimatingRef = useRef(false);
+  const animationCleanupRef = useRef<(() => void) | null>(null);
 
   // Force re-render when value changes (but not during animations)
   const triggerUpdate = useCallback(() => {
     if (!isAnimatingRef.current) {
       forceUpdate({});
     }
+  }, []);
+
+  // Cleanup function for component unmount
+  useEffect(() => {
+    return () => {
+      // Clear all listeners
+      listenersRef.current.clear();
+
+      // Stop any ongoing animations
+      if (animationCleanupRef.current) {
+        animationCleanupRef.current();
+        animationCleanupRef.current = null;
+      }
+
+      // Reset animation state
+      isAnimatingRef.current = false;
+    };
   }, []);
 
   // Notify all listeners when value changes
@@ -47,7 +65,15 @@ export function useSharedValue<T = number>(initialValue: T): SharedValue<T> {
       ) {
         if (typeof valueRef.current === "number") {
           isAnimatingRef.current = true;
-          handleAnimation(sharedValue as any, newValue);
+          // Clear previous animation cleanup if exists
+          if (animationCleanupRef.current) {
+            animationCleanupRef.current();
+          }
+          // Store new animation cleanup
+          animationCleanupRef.current = handleAnimation(
+            sharedValue as any,
+            newValue,
+          );
         }
         return;
       }
@@ -99,43 +125,42 @@ export function useSharedValue<T = number>(initialValue: T): SharedValue<T> {
 function handleAnimation(
   sharedValue: SharedValue<number>,
   animationConfig: any,
-) {
+): (() => void) | null {
   const { __animationType } = animationConfig;
 
   switch (__animationType) {
     case "timing":
-      startTimingAnimation(
+      return startTimingAnimation(
         sharedValue,
         animationConfig.toValue,
         animationConfig.duration,
         animationConfig.easing,
         animationConfig.callback,
       );
-      break;
 
     case "spring":
-      startSpringAnimation(
+      return startSpringAnimation(
         sharedValue,
         animationConfig.toValue,
         animationConfig,
         animationConfig.callback,
       );
-      break;
 
     case "repeat":
       handleRepeatAnimation(sharedValue, animationConfig);
-      break;
+      return null; // TODO: Implement cleanup for repeat animations
 
     case "sequence":
       handleSequenceAnimation(sharedValue, animationConfig);
-      break;
+      return null; // TODO: Implement cleanup for sequence animations
 
     case "delay":
       handleDelayAnimation(sharedValue, animationConfig);
-      break;
+      return null; // TODO: Implement cleanup for delay animations
 
     default:
       console.warn("Unknown animation type:", __animationType);
+      return null;
   }
 }
 

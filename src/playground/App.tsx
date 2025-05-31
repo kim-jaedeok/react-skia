@@ -21,7 +21,9 @@ function App() {
           onDemoSelect={setSelectedDemo}
         />
         <main className="main-content">
-          <div className="demo-container">{CurrentDemo && <CurrentDemo />}</div>
+          <div className="demo-container">
+            {CurrentDemo && <CurrentDemo key={selectedDemo} />}
+          </div>
         </main>
       </SkiaProvider>
     </div>

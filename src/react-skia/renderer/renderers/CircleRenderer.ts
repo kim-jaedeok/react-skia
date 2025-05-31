@@ -34,4 +34,13 @@ export class CircleRenderer implements Renderer {
 
     paint.delete();
   }
+
+  /**
+   * Clean up resources
+   * CircleRenderer doesn't hold persistent resources, cleanup is handled per-render
+   */
+  cleanup(): void {
+    // No persistent resources to clean up
+    // Paint objects are cleaned up immediately after use in render method
+  }
 }

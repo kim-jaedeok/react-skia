@@ -164,4 +164,20 @@ export class SkiaRenderer {
   getSupportedTypes(): string[] {
     return Array.from(this.rendererMap.keys());
   }
+
+  // Clean up resources when renderer is no longer needed
+  cleanup(): void {
+    // Clean up individual renderers that have cleanup methods
+    for (const renderer of this.rendererMap.values()) {
+      renderer.cleanup();
+    }
+
+    // Clear renderer map to release references
+    this.rendererMap.clear();
+
+    // Clean up utils if it has cleanup method
+    if (this.utils && typeof (this.utils as any).cleanup === "function") {
+      (this.utils as any).cleanup();
+    }
+  }
 }

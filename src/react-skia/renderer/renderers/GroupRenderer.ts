@@ -34,4 +34,13 @@ export class GroupRenderer implements Renderer {
 
     canvas.restore();
   }
+
+  /**
+   * Clean up resources
+   * GroupRenderer doesn't hold persistent resources, cleanup is handled per-render
+   */
+  cleanup(): void {
+    // No persistent resources to clean up
+    // Paint objects are cleaned up immediately after use in render method
+  }
 }

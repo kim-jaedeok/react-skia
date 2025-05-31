@@ -338,4 +338,20 @@ export class ImageRenderer implements Renderer {
       return null;
     }
   }
+
+  /**
+   * Clean up cached images and loading promises
+   */
+  cleanup(): void {
+    // Clean up cached Skia images
+    for (const image of this.imageCache.values()) {
+      if (image && typeof image.delete === "function") {
+        image.delete();
+      }
+    }
+    this.imageCache.clear();
+
+    // Clear loading promises
+    this.loadingImages.clear();
+  }
 }
