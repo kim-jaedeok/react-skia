@@ -8,7 +8,6 @@ export default defineConfig({
     react(),
     checker({
       typescript: {
-        tsconfigPath: "./tsconfig.app.json",
         buildMode: false,
       },
       overlay: {
