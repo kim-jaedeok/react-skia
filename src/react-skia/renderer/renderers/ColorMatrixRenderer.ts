@@ -1,15 +1,20 @@
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { ReactNode } from "react";
 
-export class ColorMatrixRenderer implements Renderer {
-  private renderChildrenFn: (children: any, context: RendererContext) => void;
+import type { ColorMatrixProps, Renderer, RendererContext } from "./types";
+
+export class ColorMatrixRenderer implements Renderer<ColorMatrixProps> {
+  private renderChildrenFn: (
+    children: ReactNode,
+    context: RendererContext,
+  ) => void;
 
   constructor(
-    renderChildrenFn: (children: any, context: RendererContext) => void,
+    renderChildrenFn: (children: ReactNode, context: RendererContext) => void,
   ) {
     this.renderChildrenFn = renderChildrenFn;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: ColorMatrixProps, context: RendererContext) {
     const { matrix, children } = props;
     const { CanvasKit, canvas } = context;
 
@@ -34,7 +39,7 @@ export class ColorMatrixRenderer implements Renderer {
    * Clean up resources
    * ColorMatrixRenderer doesn't hold persistent resources, cleanup is handled per-render
    */
-  cleanup(): void {
+  cleanup() {
     // No persistent resources to clean up
     // Paint and filter objects are cleaned up immediately after use in render method
   }

@@ -1,14 +1,14 @@
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { RectProps, Renderer, RendererContext } from "./types";
 import { RenderUtils } from "./utils";
 
-export class RectRenderer implements Renderer {
+export class RectRenderer implements Renderer<RectProps> {
   private utils: RenderUtils;
 
   constructor(utils: RenderUtils) {
     this.utils = utils;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: RectProps, context: RendererContext) {
     const { x, y, width, height, color, style, strokeWidth } = props;
     const { CanvasKit, canvas } = context;
 
@@ -40,7 +40,7 @@ export class RectRenderer implements Renderer {
    * Clean up resources
    * RectRenderer doesn't hold persistent resources, cleanup is handled per-render
    */
-  cleanup(): void {
+  cleanup() {
     // No persistent resources to clean up
     // Paint objects are cleaned up immediately after use in render method
   }

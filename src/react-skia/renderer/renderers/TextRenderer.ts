@@ -1,14 +1,16 @@
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { Canvas } from "canvaskit-wasm";
+
+import type { Renderer, RendererContext, TextProps } from "./types";
 import { RenderUtils } from "./utils";
 
-export class TextRenderer implements Renderer {
+export class TextRenderer implements Renderer<TextProps> {
   private utils: RenderUtils;
 
   constructor(utils: RenderUtils) {
     this.utils = utils;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: TextProps, context: RendererContext) {
     const { x, y, text, fontSize = 16, color = "#000000" } = props;
     const { canvas } = context;
 
@@ -25,9 +27,9 @@ export class TextRenderer implements Renderer {
     y: number,
     fontSize: number,
     color: string,
-    skiaCanvas: any,
+    skiaCanvas: Canvas,
     context: RendererContext,
-  ): void {
+  ) {
     try {
       // Create temporary HTML canvas for text rendering
       const tempCanvas = document.createElement("canvas");
@@ -144,7 +146,7 @@ export class TextRenderer implements Renderer {
    * Clean up resources
    * TextRenderer doesn't hold persistent resources, cleanup is handled per-render
    */
-  cleanup(): void {
+  cleanup() {
     // No persistent resources to clean up
     // All paint, font, and image objects are cleaned up immediately after use in render methods
   }

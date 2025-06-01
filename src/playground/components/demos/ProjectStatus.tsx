@@ -34,7 +34,6 @@ export function ProjectStatus() {
               <li>SVG 호환 패스 그리기</li>
               <li>그룹화 및 변환 행렬</li>
               <li>투명도 및 레이어링</li>
-              <li>애니메이션 시스템 (useSharedValue)</li>
               <li>이징 함수 라이브러리</li>
               <li>이미지 로딩 및 렌더링</li>
               <li>그라디언트 효과 (Linear, Radial)</li>
@@ -49,6 +48,7 @@ export function ProjectStatus() {
               🚧 구현 중/예정
             </h5>
             <ul style={{ paddingLeft: "20px", lineHeight: "1.6" }}>
+              <li>애니메이션 시스템 (useSharedValue)</li>
               <li>클리핑 및 마스킹</li>
               <li>터치/마우스 이벤트 처리</li>
               <li>제스처 인식</li>

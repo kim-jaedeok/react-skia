@@ -3,7 +3,9 @@ import type { CanvasKit } from "canvaskit-wasm";
 // Declare global CanvasKit
 declare global {
   interface Window {
-    CanvasKitInit: any;
+    CanvasKitInit: (options?: {
+      locateFile?: (path: string) => string;
+    }) => Promise<CanvasKit>;
   }
 }
 
@@ -14,7 +16,7 @@ class SkiaInstance {
 
   private constructor() {}
 
-  public static getInstance(): SkiaInstance {
+  public static getInstance() {
     if (!SkiaInstance.instance) {
       SkiaInstance.instance = new SkiaInstance();
     }
@@ -52,22 +54,22 @@ class SkiaInstance {
     return this.initPromise;
   }
 
-  public getCanvasKit(): CanvasKit | null {
+  public getCanvasKit() {
     return this.canvasKit;
   }
 
   // Utility methods for creating Skia objects
-  public createPath(): any {
+  public createPath() {
     if (!this.canvasKit) throw new Error("CanvasKit not initialized");
     return new this.canvasKit.Path();
   }
 
-  public createPaint(): any {
+  public createPaint() {
     if (!this.canvasKit) throw new Error("CanvasKit not initialized");
     return new this.canvasKit.Paint();
   }
 
-  public createFont(fontData?: ArrayBuffer, size?: number): any {
+  public createFont(fontData?: ArrayBuffer, size?: number) {
     if (!this.canvasKit) throw new Error("CanvasKit not initialized");
     if (fontData) {
       const typeface =
@@ -77,17 +79,17 @@ class SkiaInstance {
     return new this.canvasKit.Font(null, size || 16);
   }
 
-  public parseColorString(color: string): Float32Array {
+  public parseColorString(color: string) {
     if (!this.canvasKit) throw new Error("CanvasKit not initialized");
     return this.canvasKit.parseColorString(color);
   }
 
-  public Color(r: number, g: number, b: number, a: number = 1): Float32Array {
+  public Color(r: number, g: number, b: number, a: number = 1) {
     if (!this.canvasKit) throw new Error("CanvasKit not initialized");
     return this.canvasKit.Color(r, g, b, a);
   }
 
-  public Matrix(): any {
+  public Matrix() {
     if (!this.canvasKit) throw new Error("CanvasKit not initialized");
     return this.canvasKit.Matrix;
   }

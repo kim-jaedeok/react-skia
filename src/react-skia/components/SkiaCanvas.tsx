@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 
 import type { Surface } from "canvaskit-wasm";
 
-import { useSkia } from "../providers/SkiaProvider";
+import { useSkia } from "../hooks/useSkia";
 import { SkiaRenderer } from "../renderer/SkiaRenderer";
 
 interface SkiaCanvasProps {

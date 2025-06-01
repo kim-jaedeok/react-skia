@@ -18,45 +18,47 @@ import {
   RectRenderer,
   RenderUtils,
   type Renderer,
+  type RendererContext,
   TextRenderer,
 } from "./renderers";
 
 export class SkiaRenderer {
   private utils: RenderUtils;
-  private rendererMap: Map<string, Renderer>;
+  private rendererMap: Map<string, Renderer<unknown>>;
 
   constructor(CanvasKit: CanvasKit) {
     this.utils = new RenderUtils(CanvasKit);
 
     // Initialize renderer map with type assertions
-    this.rendererMap = new Map<`skia-${string}`, Renderer>([
+    this.rendererMap = new Map<`skia-${string}`, Renderer<unknown>>([
       ["skia-rect", new RectRenderer(this.utils)],
       ["skia-circle", new CircleRenderer(this.utils)],
       ["skia-path", new PathRenderer(this.utils)],
       ["skia-text", new TextRenderer(this.utils)],
       [
         "skia-group",
-        new GroupRenderer((children: any, context: any) =>
+        new GroupRenderer((children: ReactNode, context: RendererContext) =>
           this.renderChildren(children, context.canvas),
         ),
       ],
       [
         "skia-blur",
-        new BlurRenderer((children: any, context: any) =>
+        new BlurRenderer((children: ReactNode, context: RendererContext) =>
           this.renderChildren(children, context.canvas),
         ),
       ],
       [
         "skia-colormatrix",
-        new ColorMatrixRenderer((children: any, context: any) =>
-          this.renderChildren(children, context.canvas),
+        new ColorMatrixRenderer(
+          (children: ReactNode, context: RendererContext) =>
+            this.renderChildren(children, context.canvas),
         ),
       ],
       ["skia-image", new ImageRenderer(this.utils)],
     ]);
   }
 
-  render(children: ReactNode, canvas: Canvas): void {
+  render(children: ReactNode, canvas: Canvas) {
     Children.forEach(children, child => {
       if (isValidElement(child)) {
         this.renderReactElement(child, canvas);
@@ -66,7 +68,7 @@ export class SkiaRenderer {
     });
   }
 
-  private renderReactElement(element: ReactElement, canvas: Canvas): void {
+  private renderReactElement(element: ReactElement, canvas: Canvas) {
     const { type, props } = element;
 
     // React Fragment 처리
@@ -92,7 +94,7 @@ export class SkiaRenderer {
           CanvasKit: this.utils.getCanvasKit(),
           canvas: canvas,
         };
-        renderer.render(props || {}, context);
+        renderer.render((props as unknown) || ({} as unknown), context);
       } else {
         console.warn(`Unsupported element type: ${type}`);
       }
@@ -104,11 +106,15 @@ export class SkiaRenderer {
         // 함수형 컴포넌트인지 클래스 컴포넌트인지 확인
         if (type.prototype && type.prototype.isReactComponent) {
           // 클래스 컴포넌트
-          const instance = new (type as any)(props);
+          const ComponentType = type as new (props: unknown) => {
+            render(): ReactElement;
+          };
+          const instance = new ComponentType(props);
           result = instance.render();
         } else {
           // 함수형 컴포넌트
-          result = (type as any)(props);
+          const ComponentType = type as (props: unknown) => ReactElement;
+          result = ComponentType(props);
         }
 
         if (isValidElement(result)) {
@@ -146,27 +152,27 @@ export class SkiaRenderer {
   }
 
   // Renderer들이 자식을 렌더링할 때 사용할 메서드
-  private renderChildren(children: ReactNode, canvas: Canvas): void {
+  private renderChildren(children: ReactNode, canvas: Canvas) {
     this.render(children, canvas);
   }
 
   // 새로운 렌더러를 Map에 동적으로 추가할 수 있는 메서드
-  addRenderer(type: string, renderer: any): void {
+  addRenderer(type: string, renderer: Renderer) {
     this.rendererMap.set(type, renderer);
   }
 
   // 렌더러를 제거하는 메서드
-  removeRenderer(type: string): boolean {
+  removeRenderer(type: string) {
     return this.rendererMap.delete(type);
   }
 
   // 지원되는 타입 목록을 반환하는 메서드
-  getSupportedTypes(): string[] {
+  getSupportedTypes() {
     return Array.from(this.rendererMap.keys());
   }
 
   // Clean up resources when renderer is no longer needed
-  cleanup(): void {
+  cleanup() {
     // Clean up individual renderers that have cleanup methods
     for (const renderer of this.rendererMap.values()) {
       renderer.cleanup();
@@ -176,8 +182,8 @@ export class SkiaRenderer {
     this.rendererMap.clear();
 
     // Clean up utils if it has cleanup method
-    if (this.utils && typeof (this.utils as any).cleanup === "function") {
-      (this.utils as any).cleanup();
+    if (this.utils && typeof this.utils.cleanup === "function") {
+      this.utils.cleanup();
     }
   }
 }

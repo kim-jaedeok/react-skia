@@ -1,16 +1,12 @@
 import type { DemoItem } from "../Sidebar";
-import { AdvancedAnimations } from "./AdvancedAnimations";
-import { AnimationDemo } from "./AnimationDemo";
 import { BasicShapes } from "./BasicShapes";
 import { ComplexScene } from "./ComplexScene";
 import { GradientEffects } from "./GradientEffects";
 import { GroupAndOpacity } from "./GroupAndOpacity";
 import { ImageRendering } from "./ImageRendering";
-import { InteractiveAnimations } from "./InteractiveAnimations";
 import { InteractiveDemo } from "./InteractiveDemo";
 import { PathDrawing } from "./PathDrawing";
 import { PerformanceTest } from "./PerformanceTest";
-import { PhysicsAnimations } from "./PhysicsAnimations";
 import { ProjectStatus } from "./ProjectStatus";
 import { TextRendering } from "./TextRendering";
 
@@ -77,34 +73,6 @@ export const DEMO_ITEMS: DemoItem[] = [
     icon: "🖼️",
     description: "이미지 로딩 및 표시",
     Component: ImageRendering,
-  },
-  {
-    id: "animation",
-    title: "애니메이션",
-    icon: "⚡",
-    description: "이동 + 크기 애니메이션",
-    Component: AnimationDemo,
-  },
-  {
-    id: "advanced-animations",
-    title: "고급 애니메이션",
-    icon: "🎬",
-    description: "복잡한 애니메이션",
-    Component: AdvancedAnimations,
-  },
-  {
-    id: "interactive-animations",
-    title: "인터랙티브 애니메이션",
-    icon: "🕹️",
-    description: "사용자 상호작용",
-    Component: InteractiveAnimations,
-  },
-  {
-    id: "physics-animations",
-    title: "물리 기반 애니메이션",
-    icon: "⚛️",
-    description: "물리 시뮬레이션",
-    Component: PhysicsAnimations,
   },
   {
     id: "project-status",

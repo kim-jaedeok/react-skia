@@ -1,16 +1,18 @@
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { Image } from "canvaskit-wasm";
+
+import type { ImageProps, Renderer, RendererContext } from "./types";
 import { RenderUtils } from "./utils";
 
-export class ImageRenderer implements Renderer {
+export class ImageRenderer implements Renderer<ImageProps> {
   private utils: RenderUtils;
-  private imageCache = new Map<string, any>();
-  private loadingImages = new Map<string, Promise<any>>();
+  private imageCache = new Map<string, Image | null>();
+  private loadingImages = new Map<string, Promise<Image | null>>();
 
   constructor(utils: RenderUtils) {
     this.utils = utils;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: ImageProps, context: RendererContext) {
     const { x, y, width, height, src, fit = "fill", opacity = 1 } = props;
     const { CanvasKit, canvas } = context;
 
@@ -37,8 +39,8 @@ export class ImageRenderer implements Renderer {
       paint.setAlphaf(opacity);
     }
 
-    const imageWidth = cachedImage.width();
-    const imageHeight = cachedImage.height();
+    const imageWidth = cachedImage?.width?.() ?? 0;
+    const imageHeight = cachedImage?.height?.() ?? 0;
 
     let srcRect = CanvasKit.XYWHRect(0, 0, imageWidth, imageHeight);
     let destRect = CanvasKit.XYWHRect(x, y, width, height);
@@ -99,7 +101,7 @@ export class ImageRenderer implements Renderer {
     width: number,
     height: number,
     context: RendererContext,
-  ): void {
+  ) {
     const { CanvasKit, canvas } = context;
 
     // Show loading placeholder
@@ -123,7 +125,7 @@ export class ImageRenderer implements Renderer {
     font.delete();
   }
 
-  private async loadImage(src: string, context: RendererContext): Promise<any> {
+  private async loadImage(src: string, context: RendererContext) {
     // Check cache first
     if (this.imageCache.has(src)) {
       return this.imageCache.get(src);
@@ -152,7 +154,7 @@ export class ImageRenderer implements Renderer {
   private async loadImageFromSource(
     src: string,
     context: RendererContext,
-  ): Promise<any> {
+  ): Promise<Image | null> {
     // Try multiple approaches to load the image
     const attempts = [
       () => this.loadWithImageElement(src, context),
@@ -169,7 +171,7 @@ export class ImageRenderer implements Renderer {
       try {
         const result = await attempts[i]();
         return result;
-      } catch (error) {
+      } catch {
         if (i === attempts.length - 1) {
           // Last attempt failed, create fallback
           return this.createFallbackImage(
@@ -182,9 +184,10 @@ export class ImageRenderer implements Renderer {
         }
       }
     }
+    return null;
   }
 
-  private getImageFilename(url: string): string {
+  private getImageFilename(url: string) {
     // Extract filename from URL or create one based on URL pattern
     if (url.includes("FF6B6B") || url.includes("sample-1"))
       return "sample-1.svg";
@@ -200,7 +203,7 @@ export class ImageRenderer implements Renderer {
   private loadWithImageElement(
     src: string,
     context: RendererContext,
-  ): Promise<any> {
+  ): Promise<Image | null> {
     return new Promise((resolve, reject) => {
       const img = new window.Image();
       img.crossOrigin = "anonymous";
@@ -231,7 +234,7 @@ export class ImageRenderer implements Renderer {
   private convertHtmlImageToSkia(
     img: HTMLImageElement,
     context: RendererContext,
-  ): any {
+  ): Image | null {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -262,7 +265,7 @@ export class ImageRenderer implements Renderer {
         pixels,
         canvas.width * 4,
       );
-    } catch (error) {
+    } catch {
       // Method 1 failed, try method 2
     }
 
@@ -270,7 +273,7 @@ export class ImageRenderer implements Renderer {
       try {
         // Method 2: MakeImageFromCanvasImageSource
         skiaImage = context.CanvasKit.MakeImageFromCanvasImageSource(canvas);
-      } catch (error) {
+      } catch {
         // Method 2 failed, try method 3
       }
     }
@@ -288,7 +291,7 @@ export class ImageRenderer implements Renderer {
     color: string,
     text: string,
     context: RendererContext,
-  ): any {
+  ): Image | null {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -342,12 +345,10 @@ export class ImageRenderer implements Renderer {
   /**
    * Clean up cached images and loading promises
    */
-  cleanup(): void {
-    // Clean up cached Skia images
+  cleanup() {
+    // Clean up cached images and loading promises
     for (const image of this.imageCache.values()) {
-      if (image && typeof image.delete === "function") {
-        image.delete();
-      }
+      image?.delete();
     }
     this.imageCache.clear();
 

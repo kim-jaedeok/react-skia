@@ -1,4 +1,5 @@
 import { Children, isValidElement } from "react";
+import type { ReactElement } from "react";
 
 import type { CanvasKit, Paint } from "canvaskit-wasm";
 
@@ -7,6 +8,7 @@ import type {
   LinearGradientProps,
   PaintOptions,
   RadialGradientProps,
+  SkiaProps,
 } from "./types";
 
 export class RenderUtils {
@@ -19,14 +21,14 @@ export class RenderUtils {
   /**
    * Get the CanvasKit instance
    */
-  getCanvasKit(): CanvasKit {
+  getCanvasKit() {
     return this.CanvasKit;
   }
 
   /**
    * Create paint with color and style options
    */
-  createPaint(options: PaintOptions = {}): Paint {
+  createPaint(options: PaintOptions = {}) {
     const { color = "#000000", style = "fill", strokeWidth = 1 } = options;
 
     const paint = new this.CanvasKit.Paint();
@@ -53,7 +55,7 @@ export class RenderUtils {
   /**
    * Create paint without default color (for gradient usage)
    */
-  createPaintWithoutColor(options: Omit<PaintOptions, "color"> = {}): Paint {
+  createPaintWithoutColor(options: Omit<PaintOptions, "color"> = {}) {
     const { style = "fill", strokeWidth = 1 } = options;
 
     const paint = new this.CanvasKit.Paint();
@@ -78,7 +80,7 @@ export class RenderUtils {
   /**
    * Check if props contain gradient children
    */
-  hasGradientChildren(props: any): boolean {
+  hasGradientChildren(props: SkiaProps) {
     if (!props || !props.children) {
       return false;
     }
@@ -103,11 +105,15 @@ export class RenderUtils {
 
           if (type.prototype && type.prototype.isReactComponent) {
             // Class component
-            const instance = new (type as any)(child.props);
+            const ComponentType = type as new (props: unknown) => {
+              render(): ReactElement;
+            };
+            const instance = new ComponentType(child.props);
             result = instance.render();
           } else {
             // Function component
-            result = (type as any)(child.props);
+            const ComponentType = type as (props: unknown) => ReactElement;
+            result = ComponentType(child.props);
           }
 
           if (isValidElement(result)) {
@@ -131,23 +137,30 @@ export class RenderUtils {
    * Apply gradient from children to paint
    */
   applyGradientFromChildren(
-    props: any,
+    props: SkiaProps,
     paint: Paint,
     bounds?: GradientBounds,
-  ): void {
+  ) {
     if (!props || !props.children) return;
 
     Children.forEach(props.children, child => {
       if (!isValidElement(child)) return;
 
       const { type } = child;
-      const childProps = child.props as any;
+      const childProps = child.props as Record<string, unknown>;
 
       if (typeof type === "string") {
         if (type === "skia-linear-gradient") {
-          this.applyLinearGradient(childProps, paint, bounds);
+          this.applyLinearGradient(
+            childProps as unknown as LinearGradientProps,
+            paint,
+            bounds,
+          );
         } else if (type === "skia-radial-gradient") {
-          this.applyRadialGradient(childProps, paint, bounds);
+          this.applyRadialGradient(
+            childProps as unknown as RadialGradientProps,
+            paint,
+          );
         }
       } else if (typeof type === "function") {
         try {
@@ -155,18 +168,29 @@ export class RenderUtils {
 
           if (type.prototype && type.prototype.isReactComponent) {
             // Class component
-            const instance = new (type as any)(childProps);
+            const ComponentType = type as new (props: unknown) => {
+              render(): ReactElement;
+            };
+            const instance = new ComponentType(childProps);
             result = instance.render();
           } else {
             // Function component
-            result = (type as any)(childProps);
+            const ComponentType = type as (props: unknown) => ReactElement;
+            result = ComponentType(childProps);
           }
 
           if (isValidElement(result)) {
             if (result.type === "skia-linear-gradient") {
-              this.applyLinearGradient(result.props as any, paint, bounds);
+              this.applyLinearGradient(
+                result.props as unknown as LinearGradientProps,
+                paint,
+                bounds,
+              );
             } else if (result.type === "skia-radial-gradient") {
-              this.applyRadialGradient(result.props as any, paint, bounds);
+              this.applyRadialGradient(
+                result.props as unknown as RadialGradientProps,
+                paint,
+              );
             }
           }
         } catch (error) {
@@ -183,7 +207,7 @@ export class RenderUtils {
     gradientProps: LinearGradientProps,
     paint: Paint,
     bounds?: GradientBounds,
-  ): void {
+  ) {
     const { start, end, colors, positions, mode } = gradientProps;
 
     if (!start || !end || !Array.isArray(colors)) {
@@ -237,8 +261,7 @@ export class RenderUtils {
   private applyRadialGradient(
     gradientProps: RadialGradientProps,
     paint: Paint,
-    _bounds?: GradientBounds,
-  ): void {
+  ) {
     const { center, radius, colors, positions, mode } = gradientProps;
 
     if (!center || radius === undefined || !Array.isArray(colors)) {
@@ -272,9 +295,9 @@ export class RenderUtils {
    * Render non-gradient children
    */
   renderNonGradientChildren(
-    props: any,
-    renderElementFn: (child: any) => void,
-  ): void {
+    props: SkiaProps,
+    renderElementFn: (child: ReactElement) => void,
+  ) {
     if (!props || !props.children) return;
 
     Children.forEach(props.children, child => {
@@ -299,7 +322,7 @@ export class RenderUtils {
   /**
    * Clean up resources and references
    */
-  cleanup(): void {
+  cleanup() {
     // Clear any cached objects or references if they exist in the future
     // This method ensures proper cleanup of native resources
     // Note: Individual Paint, Shader, and other CanvasKit objects

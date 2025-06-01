@@ -1,14 +1,14 @@
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { CircleProps, Renderer, RendererContext } from "./types";
 import { RenderUtils } from "./utils";
 
-export class CircleRenderer implements Renderer {
+export class CircleRenderer implements Renderer<CircleProps> {
   private utils: RenderUtils;
 
   constructor(utils: RenderUtils) {
     this.utils = utils;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: CircleProps, context: RendererContext) {
     const { cx, cy, r, color, style, strokeWidth } = props;
     const { canvas } = context;
 
@@ -39,7 +39,7 @@ export class CircleRenderer implements Renderer {
    * Clean up resources
    * CircleRenderer doesn't hold persistent resources, cleanup is handled per-render
    */
-  cleanup(): void {
+  cleanup() {
     // No persistent resources to clean up
     // Paint objects are cleaned up immediately after use in render method
   }

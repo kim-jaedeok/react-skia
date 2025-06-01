@@ -1,15 +1,20 @@
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { ReactNode } from "react";
 
-export class GroupRenderer implements Renderer {
-  private renderChildrenFn: (children: any, context: RendererContext) => void;
+import type { GroupProps, Renderer, RendererContext } from "./types";
+
+export class GroupRenderer implements Renderer<GroupProps> {
+  private renderChildrenFn: (
+    children: ReactNode,
+    context: RendererContext,
+  ) => void;
 
   constructor(
-    renderChildrenFn: (children: any, context: RendererContext) => void,
+    renderChildrenFn: (children: ReactNode, context: RendererContext) => void,
   ) {
     this.renderChildrenFn = renderChildrenFn;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: GroupProps, context: RendererContext) {
     const { transform, opacity, children } = props;
     const { CanvasKit, canvas } = context;
 
@@ -39,7 +44,7 @@ export class GroupRenderer implements Renderer {
    * Clean up resources
    * GroupRenderer doesn't hold persistent resources, cleanup is handled per-render
    */
-  cleanup(): void {
+  cleanup() {
     // No persistent resources to clean up
     // Paint objects are cleaned up immediately after use in render method
   }

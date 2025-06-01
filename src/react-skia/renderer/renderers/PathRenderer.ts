@@ -1,16 +1,16 @@
 import type { Path } from "canvaskit-wasm";
 
-import type { RenderProps, Renderer, RendererContext } from "./types";
+import type { PathProps, Renderer, RendererContext } from "./types";
 import { RenderUtils } from "./utils";
 
-export class PathRenderer implements Renderer {
+export class PathRenderer implements Renderer<PathProps> {
   private utils: RenderUtils;
 
   constructor(utils: RenderUtils) {
     this.utils = utils;
   }
 
-  render(props: RenderProps, context: RendererContext): void {
+  render(props: PathProps, context: RendererContext) {
     const { path, color, style, strokeWidth } = props;
     const { CanvasKit, canvas } = context;
 
@@ -40,7 +40,7 @@ export class PathRenderer implements Renderer {
    * Clean up resources
    * PathRenderer doesn't hold persistent resources, cleanup is handled per-render
    */
-  cleanup(): void {
+  cleanup() {
     // No persistent resources to clean up
     // Paint and path objects are cleaned up immediately after use in render method
   }

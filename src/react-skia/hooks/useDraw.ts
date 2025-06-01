@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef } from "react";
 
 import type { Canvas, Surface } from "canvaskit-wasm";
 
-import { useSkia } from "../providers/SkiaProvider";
+import { useSkia } from "./useSkia";
 
-export function useDraw(drawFn: (canvas: Canvas) => void, deps: any[] = []) {
+export function useDraw(drawFn: (canvas: Canvas) => void) {
   const { CanvasKit } = useSkia();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const surfaceRef = useRef<Surface | null>(null);
@@ -25,7 +25,7 @@ export function useDraw(drawFn: (canvas: Canvas) => void, deps: any[] = []) {
     drawFn(canvas);
 
     surface.flush();
-  }, [CanvasKit, drawFn, ...deps]);
+  }, [CanvasKit, drawFn]);
 
   useEffect(() => {
     draw();

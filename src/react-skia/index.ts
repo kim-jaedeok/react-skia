@@ -1,7 +1,8 @@
 // React Skia Web - Main entry point
 export { SkiaCanvas } from "./components/SkiaCanvas";
-export { SkiaProvider, useSkia } from "./providers/SkiaProvider";
+export { SkiaProvider } from "./providers/SkiaProvider";
 export { useDraw } from "./hooks/useDraw";
+export { useSkia } from "./hooks/useSkia";
 
 // Skia components
 export { Group } from "./components/Group";
