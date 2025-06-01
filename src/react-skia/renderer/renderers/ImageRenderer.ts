@@ -160,11 +160,6 @@ export class ImageRenderer implements Renderer<ImageProps> {
       () => this.loadWithImageElement(src, context),
       () =>
         this.loadWithImageElement(src.replace("https://", "http://"), context),
-      () =>
-        this.loadWithImageElement(
-          `/demo-images/${this.getImageFilename(src)}`,
-          context,
-        ),
     ];
 
     for (let i = 0; i < attempts.length; i++) {
@@ -173,31 +168,12 @@ export class ImageRenderer implements Renderer<ImageProps> {
         return result;
       } catch {
         if (i === attempts.length - 1) {
-          // Last attempt failed, create fallback
-          return this.createFallbackImage(
-            120,
-            120,
-            "#CCCCCC",
-            "NO IMG",
-            context,
-          );
+          // Last attempt failed, return null to show placeholder
+          return null;
         }
       }
     }
     return null;
-  }
-
-  private getImageFilename(url: string) {
-    // Extract filename from URL or create one based on URL pattern
-    if (url.includes("FF6B6B") || url.includes("sample-1"))
-      return "sample-1.svg";
-    if (url.includes("4ECDC4") || url.includes("sample-2"))
-      return "sample-2.svg";
-    if (url.includes("45B7D1") || url.includes("sample-3"))
-      return "sample-3.svg";
-    if (url.includes("E74C3C") || url.includes("sample-4"))
-      return "sample-4.svg";
-    return "sample-1.svg"; // default fallback
   }
 
   private loadWithImageElement(
@@ -283,63 +259,6 @@ export class ImageRenderer implements Renderer<ImageProps> {
     }
 
     return skiaImage;
-  }
-
-  private createFallbackImage(
-    width: number,
-    height: number,
-    color: string,
-    text: string,
-    context: RendererContext,
-  ): Image | null {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    if (!ctx) {
-      throw new Error("Failed to create fallback canvas context");
-    }
-
-    canvas.width = width;
-    canvas.height = height;
-
-    // Fill background
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, width, height);
-
-    // Add border
-    ctx.strokeStyle = "#999999";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(0, 0, width, height);
-
-    // Draw text
-    ctx.fillStyle = "#666666";
-    ctx.font = "bold 12px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(text, width / 2, height / 2);
-
-    // Convert to CanvasKit image
-    try {
-      const imageData = ctx.getImageData(0, 0, width, height);
-      const pixels = new Uint8Array(imageData.data);
-
-      const skiaImage = context.CanvasKit.MakeImage(
-        {
-          width,
-          height,
-          alphaType: context.CanvasKit.AlphaType.Unpremul,
-          colorType: context.CanvasKit.ColorType.RGBA_8888,
-          colorSpace: context.CanvasKit.ColorSpace.SRGB,
-        },
-        pixels,
-        width * 4,
-      );
-
-      return skiaImage;
-    } catch (error) {
-      console.error("Failed to create fallback image:", error);
-      return null;
-    }
   }
 
   /**
