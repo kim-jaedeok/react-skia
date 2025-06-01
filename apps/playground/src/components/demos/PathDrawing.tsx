@@ -1,4 +1,4 @@
-import { Path, SkiaCanvas, Text } from "../../../react-skia";
+import { Path, SkiaCanvas, Text } from "@react-skia/core";
 
 export const PathDrawing = () => (
   <div>

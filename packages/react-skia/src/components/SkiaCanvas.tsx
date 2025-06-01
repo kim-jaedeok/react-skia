@@ -23,7 +23,6 @@ export const SkiaCanvas = ({
   const surfaceRef = useRef<Surface | null>(null);
   const rendererRef = useRef<SkiaRenderer | null>(null);
   const { CanvasKit } = useSkia();
-
   useEffect(() => {
     if (!CanvasKit || !canvasRef.current) {
       return;

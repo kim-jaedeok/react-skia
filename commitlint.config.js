@@ -24,6 +24,7 @@ export default {
     "type-case": [2, "always", "lower-case"],
     "type-empty": [2, "never"],
     "body-leading-blank": [2, "always"],
+    "body-max-line-length": [2, "always", 1000],
     "footer-leading-blank": [2, "always"],
   },
 };

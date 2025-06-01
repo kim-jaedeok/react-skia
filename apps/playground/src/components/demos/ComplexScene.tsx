@@ -1,4 +1,4 @@
-import { Circle, Path, Rect, SkiaCanvas } from "../../../react-skia";
+import { Circle, Path, Rect, SkiaCanvas } from "@react-skia/core";
 
 export const ComplexScene = () => (
   <div>

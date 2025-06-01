@@ -6,7 +6,7 @@ import {
   Rect,
   SkiaCanvas,
   Text,
-} from "../../../react-skia";
+} from "@react-skia/core";
 
 export const GradientEffects = () => (
   <div

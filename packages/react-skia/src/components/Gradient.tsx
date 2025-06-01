@@ -1,6 +1,6 @@
 import { createElement } from "react";
 
-export interface LinearGradientProps {
+interface LinearGradientProps {
   start: { x: number; y: number };
   end: { x: number; y: number };
   colors: string[];
@@ -8,7 +8,7 @@ export interface LinearGradientProps {
   mode?: "clamp" | "repeat" | "mirror" | "decal"; // Optional tile mode
 }
 
-export interface RadialGradientProps {
+interface RadialGradientProps {
   center: { x: number; y: number };
   radius: number;
   colors: string[];

@@ -1,4 +1,4 @@
-import { Group, Image, Rect, SkiaCanvas, Text } from "../../../react-skia";
+import { Group, Image, Rect, SkiaCanvas, Text } from "@react-skia/core";
 
 export const ImageRendering = () => (
   <div>

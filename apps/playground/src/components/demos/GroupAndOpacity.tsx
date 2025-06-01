@@ -1,4 +1,4 @@
-import { Circle, Group, Rect, SkiaCanvas, Text } from "../../../react-skia";
+import { Circle, Group, Rect, SkiaCanvas, Text } from "@react-skia/core";
 
 export const GroupAndOpacity = () => (
   <div>

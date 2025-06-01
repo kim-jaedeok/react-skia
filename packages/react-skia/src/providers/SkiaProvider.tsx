@@ -14,7 +14,7 @@ export const SkiaProvider = ({ children }: SkiaProviderProps) => {
   const [canvasKit, setCanvasKit] = useState<CanvasKit | null>(null);
 
   useEffect(() => {
-    if (canvasKit) {
+    if (!canvasKit) {
       const initSkia = async () => {
         try {
           // Load CanvasKit from CDN

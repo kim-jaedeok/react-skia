@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "composite": true,
+    "incremental": true,
+    "outDir": "./dist",
+    "paths": {
+      "@react-skia/core": ["../../packages/react-skia/src"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/vite-env.d.ts"],
+  "exclude": ["dist", "node_modules"],
+  "references": [
+    {
+      "path": "../../packages/react-skia"
+    }
+  ]
+}

@@ -31,7 +31,7 @@ export interface RendererContext {
  * Custom properties that can be passed to renderers
  * Used as default type parameter for Renderer interface
  */
-export interface RenderProps {
+interface RenderProps {
   /**
    * Custom properties that can be passed to renderers
    */
@@ -46,7 +46,7 @@ export interface RenderProps {
  * Bounds interface for defining rectangular areas
  * Used by GradientBounds type alias
  */
-export interface Bounds {
+interface Bounds {
   /**
    * X coordinate of the top-left corner
    */

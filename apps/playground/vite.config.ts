@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import checker from "vite-plugin-checker";
 
@@ -17,4 +18,9 @@ export default defineConfig({
       enableBuild: false,
     }),
   ],
+  resolve: {
+    alias: {
+      "@react-skia/core": resolve(__dirname, "../../packages/react-skia/src"),
+    },
+  },
 });

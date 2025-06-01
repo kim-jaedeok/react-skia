@@ -1,4 +1,4 @@
-import { Circle, Rect, SkiaCanvas, Text } from "../../../react-skia";
+import { Circle, Rect, SkiaCanvas, Text } from "@react-skia/core";
 
 export const BasicShapes = () => (
   <div>

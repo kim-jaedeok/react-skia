@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { SkiaProvider } from "../react-skia";
+import { SkiaProvider } from "@react-skia/core";
+
 import "./App.css";
 import { type DemoItem, Sidebar } from "./components/Sidebar";
 import { DEMO_ITEMS } from "./components/demos";

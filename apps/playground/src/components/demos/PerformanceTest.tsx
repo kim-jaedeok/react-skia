@@ -1,4 +1,4 @@
-import { Circle, SkiaCanvas, Text } from "../../../react-skia";
+import { Circle, SkiaCanvas, Text } from "@react-skia/core";
 
 export const PerformanceTest = () => (
   <div>
