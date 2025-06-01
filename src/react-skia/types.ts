@@ -1,63 +1,13 @@
 import type { ReactNode } from "react";
 
-import type {
-  CanvasKit,
-  Font,
-  Image,
-  Paint,
-  Path,
-  Canvas as SkiaCanvas,
-  Surface,
-} from "canvaskit-wasm";
+import type { Canvas, CanvasKit, Path, Surface } from "canvaskit-wasm";
 
-export interface SkiaElement {
-  /**
-   * The type of the Skia element
-   */
-  type: string;
-  /**
-   * Properties for the Skia element
-   */
-  props: SkiaProps;
-  /**
-   * Child elements
-   */
-  children?: SkiaElement[];
-}
-
-export interface SkiaProps {
+export interface ComponentProps {
   [key: string]: unknown;
   children?: ReactNode;
 }
 
-export interface SkiaDOMNode {
-  /**
-   * The type of the DOM node
-   */
-  type: string;
-  /**
-   * Properties for the DOM node
-   */
-  props: SkiaProps;
-  /**
-   * Child DOM nodes
-   */
-  children: SkiaDOMNode[];
-  /**
-   * Function to draw the node on canvas
-   */
-  draw: (canvas: SkiaCanvas) => void;
-}
-
-export type ISkiaCanvas = SkiaCanvas;
-
-export type SkiaPaint = Paint;
-
-export type SkiaPath = Path;
-
-export type SkiaImage = Image;
-
-export type SkiaFont = Font;
+// Create aliases for better naming
 
 export interface SkiaContextValue {
   /**
@@ -71,28 +21,13 @@ export interface SkiaContextValue {
   /**
    * The Skia canvas
    */
-  canvas: SkiaCanvas | null;
-}
-
-export interface DrawingProps {
-  /**
-   * Width of the drawing area
-   */
-  width: number;
-  /**
-   * Height of the drawing area
-   */
-  height: number;
-  /**
-   * Child elements to render
-   */
-  children?: ReactNode;
+  canvas: Canvas | null;
 }
 
 /**
  * Properties for a rectangle element.
  */
-export interface RectProps extends SkiaProps {
+export interface RectProps extends ComponentProps {
   /**
    * X-coordinate of the rectangle
    */
@@ -126,7 +61,7 @@ export interface RectProps extends SkiaProps {
 /**
  * Properties for a circle element.
  */
-export interface CircleProps extends SkiaProps {
+export interface CircleProps extends ComponentProps {
   /**
    * X-coordinate of the circle's center
    */
@@ -156,11 +91,11 @@ export interface CircleProps extends SkiaProps {
 /**
  * Properties for a path element.
  */
-export interface PathProps extends SkiaProps {
+export interface PathProps extends ComponentProps {
   /**
    * Path data or SkiaPath object
    */
-  path: string | SkiaPath;
+  path: string | Path;
   /**
    * Color of the path
    */
@@ -178,7 +113,7 @@ export interface PathProps extends SkiaProps {
 /**
  * Properties for a text element.
  */
-export interface TextProps extends SkiaProps {
+export interface TextProps extends ComponentProps {
   /**
    * X-coordinate of the text
    */
@@ -208,7 +143,7 @@ export interface TextProps extends SkiaProps {
 /**
  * Properties for a group element.
  */
-export interface GroupProps extends SkiaProps {
+export interface GroupProps extends ComponentProps {
   /**
    * Transformation applied to the group
    */
@@ -226,7 +161,7 @@ export interface GroupProps extends SkiaProps {
 /**
  * Properties for a blur effect element.
  */
-export interface BlurProps extends SkiaProps {
+export interface BlurProps extends ComponentProps {
   /**
    * Blur intensity
    */
@@ -240,7 +175,7 @@ export interface BlurProps extends SkiaProps {
 /**
  * Properties for a color matrix effect element.
  */
-export interface ColorMatrixProps extends SkiaProps {
+export interface ColorMatrixProps extends ComponentProps {
   /**
    * Color matrix values
    */
@@ -254,7 +189,7 @@ export interface ColorMatrixProps extends SkiaProps {
 /**
  * Properties for an image element.
  */
-export interface ImageProps extends SkiaProps {
+export interface ImageProps extends ComponentProps {
   /**
    * X-coordinate of the image
    */

@@ -12,7 +12,7 @@ export type {
   GroupProps,
   BlurProps,
   ColorMatrixProps,
-  SkiaProps,
+  ComponentProps,
 } from "../../types";
 
 // Common types for all renderers
@@ -27,6 +27,10 @@ export interface RendererContext {
   canvas: Canvas;
 }
 
+/**
+ * Custom properties that can be passed to renderers
+ * Used as default type parameter for Renderer interface
+ */
 export interface RenderProps {
   /**
    * Custom properties that can be passed to renderers
@@ -38,6 +42,10 @@ export interface RenderProps {
   children?: ReactNode;
 }
 
+/**
+ * Bounds interface for defining rectangular areas
+ * Used by GradientBounds type alias
+ */
 export interface Bounds {
   /**
    * X coordinate of the top-left corner

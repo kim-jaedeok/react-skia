@@ -1,7 +1,6 @@
 // React Skia Web - Main entry point
 export { SkiaCanvas } from "./components/SkiaCanvas";
 export { SkiaProvider } from "./providers/SkiaProvider";
-export { useDraw } from "./hooks/useDraw";
 export { useSkia } from "./hooks/useSkia";
 
 // Skia components
@@ -16,13 +15,4 @@ export { ColorMatrix } from "./components/ColorMatrix";
 export { LinearGradient, RadialGradient } from "./components/Gradient";
 
 // Skia utilities
-export type {
-  SkiaElement,
-  SkiaProps,
-  SkiaDOMNode,
-  ISkiaCanvas,
-  SkiaPaint,
-  SkiaPath,
-  SkiaImage,
-  SkiaFont,
-} from "./types";
+export type { ComponentProps } from "./types";

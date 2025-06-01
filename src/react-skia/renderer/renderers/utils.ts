@@ -4,11 +4,11 @@ import type { ReactElement } from "react";
 import type { CanvasKit, Paint } from "canvaskit-wasm";
 
 import type {
+  ComponentProps,
   GradientBounds,
   LinearGradientProps,
   PaintOptions,
   RadialGradientProps,
-  SkiaProps,
 } from "./types";
 
 export class RenderUtils {
@@ -80,7 +80,7 @@ export class RenderUtils {
   /**
    * Check if props contain gradient children
    */
-  hasGradientChildren(props: SkiaProps) {
+  hasGradientChildren(props: ComponentProps) {
     if (!props || !props.children) {
       return false;
     }
@@ -137,7 +137,7 @@ export class RenderUtils {
    * Apply gradient from children to paint
    */
   applyGradientFromChildren(
-    props: SkiaProps,
+    props: ComponentProps,
     paint: Paint,
     bounds?: GradientBounds,
   ) {
@@ -289,34 +289,6 @@ export class RenderUtils {
     paint.setShader(shader);
     // Clean up shader immediately after setting it to paint
     shader.delete();
-  }
-
-  /**
-   * Render non-gradient children
-   */
-  renderNonGradientChildren(
-    props: SkiaProps,
-    renderElementFn: (child: ReactElement) => void,
-  ) {
-    if (!props || !props.children) return;
-
-    Children.forEach(props.children, child => {
-      if (!isValidElement(child)) return;
-
-      const { type } = child;
-
-      // Render only non-gradient elements
-      if (
-        typeof type === "string" &&
-        type !== "skia-linear-gradient" &&
-        type !== "skia-radial-gradient"
-      ) {
-        renderElementFn(child);
-      } else if (typeof type === "function") {
-        // Function components are rendered
-        renderElementFn(child);
-      }
-    });
   }
 
   /**
