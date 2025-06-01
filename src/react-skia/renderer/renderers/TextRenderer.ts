@@ -1,7 +1,7 @@
 import type { Canvas } from "canvaskit-wasm";
 
 import type { Renderer, RendererContext, TextProps } from "./types";
-import { RenderUtils } from "./utils";
+import type { RenderUtils } from "./utils";
 
 export class TextRenderer implements Renderer<TextProps> {
   private utils: RenderUtils;

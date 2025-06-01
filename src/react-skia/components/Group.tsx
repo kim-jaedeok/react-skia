@@ -2,6 +2,5 @@ import { createElement } from "react";
 
 import type { GroupProps } from "../types";
 
-export function Group({ children, transform, opacity }: GroupProps) {
-  return createElement("skia-group", { transform, opacity }, children);
-}
+export const Group = ({ children, transform, opacity }: GroupProps) =>
+  createElement("skia-group", { transform, opacity }, children);

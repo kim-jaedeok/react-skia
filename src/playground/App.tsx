@@ -5,7 +5,7 @@ import "./App.css";
 import { type DemoItem, Sidebar } from "./components/Sidebar";
 import { DEMO_ITEMS } from "./components/demos";
 
-function App() {
+const App = () => {
   const [selectedDemo, setSelectedDemo] = useState(DEMO_ITEMS[0].id);
 
   const CurrentDemo = DEMO_ITEMS.find(
@@ -16,8 +16,8 @@ function App() {
     <div className="app-container">
       <SkiaProvider>
         <Sidebar
-          demoItems={DEMO_ITEMS}
           activeDemo={selectedDemo}
+          demoItems={DEMO_ITEMS}
           onDemoSelect={setSelectedDemo}
         />
         <main className="main-content">
@@ -28,6 +28,6 @@ function App() {
       </SkiaProvider>
     </div>
   );
-}
+};
 
 export default App;

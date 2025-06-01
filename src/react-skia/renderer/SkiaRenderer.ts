@@ -92,7 +92,7 @@ export class SkiaRenderer {
       if (renderer) {
         const context = {
           CanvasKit: this.utils.getCanvasKit(),
-          canvas: canvas,
+          canvas,
         };
         renderer.render((props as unknown) || ({} as unknown), context);
       } else {

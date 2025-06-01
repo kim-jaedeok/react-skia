@@ -1,7 +1,7 @@
 import type { Image } from "canvaskit-wasm";
 
 import type { ImageProps, Renderer, RendererContext } from "./types";
-import { RenderUtils } from "./utils";
+import type { RenderUtils } from "./utils";
 
 export class ImageRenderer implements Renderer<ImageProps> {
   private utils: RenderUtils;
@@ -325,8 +325,8 @@ export class ImageRenderer implements Renderer<ImageProps> {
 
       const skiaImage = context.CanvasKit.MakeImage(
         {
-          width: width,
-          height: height,
+          width,
+          height,
           alphaType: context.CanvasKit.AlphaType.Unpremul,
           colorType: context.CanvasKit.ColorType.RGBA_8888,
           colorSpace: context.CanvasKit.ColorSpace.SRGB,

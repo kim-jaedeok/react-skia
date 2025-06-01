@@ -1,5 +1,5 @@
 import type { RectProps, Renderer, RendererContext } from "./types";
-import { RenderUtils } from "./utils";
+import type { RenderUtils } from "./utils";
 
 export class RectRenderer implements Renderer<RectProps> {
   private utils: RenderUtils;

@@ -2,7 +2,7 @@ import { type ReactNode, createElement } from "react";
 
 import type { TextProps } from "../types";
 
-export function Text({
+export const Text = ({
   x,
   y,
   text,
@@ -10,8 +10,8 @@ export function Text({
   color = "#000000",
   fontFamily = "Arial",
   children,
-}: TextProps & { children?: ReactNode }) {
-  return createElement(
+}: TextProps & { children?: ReactNode }) =>
+  createElement(
     "skia-text",
     {
       x,
@@ -23,4 +23,3 @@ export function Text({
     },
     children,
   );
-}

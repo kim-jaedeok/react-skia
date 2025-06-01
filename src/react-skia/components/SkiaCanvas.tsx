@@ -13,12 +13,12 @@ interface SkiaCanvasProps {
   style?: CSSProperties;
 }
 
-export function SkiaCanvas({
+export const SkiaCanvas = ({
   width,
   height,
   children,
   style,
-}: SkiaCanvasProps) {
+}: SkiaCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const surfaceRef = useRef<Surface | null>(null);
   const rendererRef = useRef<SkiaRenderer | null>(null);
@@ -89,15 +89,15 @@ export function SkiaCanvas({
 
   return (
     <canvas
-      ref={canvasRef}
-      width={width}
       height={height}
+      ref={canvasRef}
       style={{
         border: "1px solid #ccc",
         width: `${width}px`,
         height: `${height}px`,
         ...style,
       }}
+      width={width}
     />
   );
-}
+};

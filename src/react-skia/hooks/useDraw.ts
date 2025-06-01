@@ -4,7 +4,7 @@ import type { Canvas, Surface } from "canvaskit-wasm";
 
 import { useSkia } from "./useSkia";
 
-export function useDraw(drawFn: (canvas: Canvas) => void) {
+export const useDraw = (drawFn: (canvas: Canvas) => void) => {
   const { CanvasKit } = useSkia();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const surfaceRef = useRef<Surface | null>(null);
@@ -31,14 +31,15 @@ export function useDraw(drawFn: (canvas: Canvas) => void) {
     draw();
   }, [draw]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (surfaceRef.current) {
         surfaceRef.current.delete();
         surfaceRef.current = null;
       }
-    };
-  }, []);
+    },
+    [],
+  );
 
   return { canvasRef, draw };
-}
+};

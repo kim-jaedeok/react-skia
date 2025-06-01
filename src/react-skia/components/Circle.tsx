@@ -2,7 +2,7 @@ import { type ReactNode, createElement } from "react";
 
 import type { CircleProps } from "../types";
 
-export function Circle({
+export const Circle = ({
   cx,
   cy,
   r,
@@ -10,8 +10,8 @@ export function Circle({
   strokeWidth = 1,
   style = "fill",
   children,
-}: CircleProps & { children?: ReactNode }) {
-  return createElement(
+}: CircleProps & { children?: ReactNode }) =>
+  createElement(
     "skia-circle",
     {
       cx,
@@ -23,4 +23,3 @@ export function Circle({
     },
     children,
   );
-}

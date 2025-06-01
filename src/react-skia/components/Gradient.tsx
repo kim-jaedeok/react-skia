@@ -16,34 +16,32 @@ export interface RadialGradientProps {
   mode?: "clamp" | "repeat" | "mirror" | "decal"; // Optional tile mode
 }
 
-export function LinearGradient({
+export const LinearGradient = ({
   start,
   end,
   colors,
   positions,
   mode = "clamp",
-}: LinearGradientProps) {
-  return createElement("skia-linear-gradient", {
+}: LinearGradientProps) =>
+  createElement("skia-linear-gradient", {
     start,
     end,
     colors,
     positions,
     mode,
   });
-}
 
-export function RadialGradient({
+export const RadialGradient = ({
   center,
   radius,
   colors,
   positions,
   mode = "clamp",
-}: RadialGradientProps) {
-  return createElement("skia-radial-gradient", {
+}: RadialGradientProps) =>
+  createElement("skia-radial-gradient", {
     center,
     radius,
     colors,
     positions,
     mode,
   });
-}

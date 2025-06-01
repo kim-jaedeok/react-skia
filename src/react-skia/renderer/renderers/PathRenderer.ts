@@ -1,7 +1,7 @@
 import type { Path } from "canvaskit-wasm";
 
 import type { PathProps, Renderer, RendererContext } from "./types";
-import { RenderUtils } from "./utils";
+import type { RenderUtils } from "./utils";
 
 export class PathRenderer implements Renderer<PathProps> {
   private utils: RenderUtils;

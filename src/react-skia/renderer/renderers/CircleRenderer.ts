@@ -1,5 +1,5 @@
 import type { CircleProps, Renderer, RendererContext } from "./types";
-import { RenderUtils } from "./utils";
+import type { RenderUtils } from "./utils";
 
 export class CircleRenderer implements Renderer<CircleProps> {
   private utils: RenderUtils;

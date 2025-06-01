@@ -2,7 +2,7 @@ import { type ReactNode, createElement } from "react";
 
 import type { RectProps } from "../types";
 
-export function Rect({
+export const Rect = ({
   x,
   y,
   width,
@@ -11,8 +11,8 @@ export function Rect({
   strokeWidth = 1,
   style = "fill",
   children,
-}: RectProps & { children?: ReactNode }) {
-  return createElement(
+}: RectProps & { children?: ReactNode }) =>
+  createElement(
     "skia-rect",
     {
       x,
@@ -25,4 +25,3 @@ export function Rect({
     },
     children,
   );
-}

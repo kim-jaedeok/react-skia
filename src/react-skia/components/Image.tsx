@@ -10,7 +10,7 @@ interface ImageProps {
   opacity?: number;
 }
 
-export function Image({
+export const Image = ({
   x,
   y,
   width,
@@ -18,8 +18,8 @@ export function Image({
   src,
   fit = "fill",
   opacity = 1,
-}: ImageProps) {
-  return createElement("skia-image", {
+}: ImageProps) =>
+  createElement("skia-image", {
     x,
     y,
     width,
@@ -28,4 +28,3 @@ export function Image({
     fit,
     opacity,
   });
-}

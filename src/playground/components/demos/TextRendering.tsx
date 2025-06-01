@@ -1,39 +1,37 @@
 import { SkiaCanvas, Text } from "../../../react-skia";
 
-export function TextRendering() {
-  return (
-    <div>
-      <h3>📝 텍스트 렌더링</h3>
-      <SkiaCanvas width={350} height={200}>
-        <Text
-          x={10}
-          y={40}
-          text="Hello Skia Web!"
-          fontSize={24}
-          color="#2C3E50"
-        />
-        <Text
-          x={10}
-          y={80}
-          text="한글도 지원됩니다!"
-          fontSize={18}
-          color="#E74C3C"
-        />
-        <Text
-          x={10}
-          y={120}
-          text="High Performance Graphics"
-          fontSize={14}
-          color="#8E44AD"
-        />
-        <Text
-          x={10}
-          y={160}
-          text="CanvasKit으로 구현"
-          fontSize={12}
-          color="#95A5A6"
-        />
-      </SkiaCanvas>
-    </div>
-  );
-}
+export const TextRendering = () => (
+  <div>
+    <h3>📝 텍스트 렌더링</h3>
+    <SkiaCanvas height={200} width={350}>
+      <Text
+        color="#2C3E50"
+        fontSize={24}
+        text="Hello Skia Web!"
+        x={10}
+        y={40}
+      />
+      <Text
+        color="#E74C3C"
+        fontSize={18}
+        text="한글도 지원됩니다!"
+        x={10}
+        y={80}
+      />
+      <Text
+        color="#8E44AD"
+        fontSize={14}
+        text="High Performance Graphics"
+        x={10}
+        y={120}
+      />
+      <Text
+        color="#95A5A6"
+        fontSize={12}
+        text="CanvasKit으로 구현"
+        x={10}
+        y={160}
+      />
+    </SkiaCanvas>
+  </div>
+);

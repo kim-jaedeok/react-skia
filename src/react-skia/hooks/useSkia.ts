@@ -8,10 +8,10 @@ export const SkiaContext = createContext<SkiaContextValue>({
   canvas: null,
 });
 
-export function useSkia() {
+export const useSkia = () => {
   const context = useContext(SkiaContext);
   if (!context) {
     throw new Error("useSkia must be used within a SkiaProvider");
   }
   return context;
-}
+};

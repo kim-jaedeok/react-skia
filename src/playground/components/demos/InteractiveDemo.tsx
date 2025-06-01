@@ -1,35 +1,33 @@
 import { Circle, Group, Rect, SkiaCanvas, Text } from "../../../react-skia";
 
-export function InteractiveDemo() {
-  return (
-    <div>
-      <h3>🎮 상호작용</h3>
-      <SkiaCanvas width={350} height={200} style={{ cursor: "pointer" }}>
-        <Group>
-          <Rect x={50} y={50} width={100} height={60} color="#3498DB" />
-          <Text x={70} y={85} text="Click Me!" fontSize={16} color="#FFF" />
-        </Group>
+export const InteractiveDemo = () => (
+  <div>
+    <h3>🎮 상호작용</h3>
+    <SkiaCanvas height={200} style={{ cursor: "pointer" }} width={350}>
+      <Group>
+        <Rect color="#3498DB" height={60} width={100} x={50} y={50} />
+        <Text color="#FFF" fontSize={16} text="Click Me!" x={70} y={85} />
+      </Group>
 
-        <Group>
-          <Circle cx={250} cy={80} r={30} color="#E74C3C" />
-          <Text x={230} y={85} text="Touch" fontSize={12} color="#FFF" />
-        </Group>
+      <Group>
+        <Circle color="#E74C3C" cx={250} cy={80} r={30} />
+        <Text color="#FFF" fontSize={12} text="Touch" x={230} y={85} />
+      </Group>
 
-        <Text
-          x={10}
-          y={150}
-          text="터치/클릭 이벤트 (구현 예정)"
-          fontSize={12}
-          color="#666"
-        />
-        <Text
-          x={10}
-          y={170}
-          text="마우스/터치 좌표 감지"
-          fontSize={11}
-          color="#999"
-        />
-      </SkiaCanvas>
-    </div>
-  );
-}
+      <Text
+        color="#666"
+        fontSize={12}
+        text="터치/클릭 이벤트 (구현 예정)"
+        x={10}
+        y={150}
+      />
+      <Text
+        color="#999"
+        fontSize={11}
+        text="마우스/터치 좌표 감지"
+        x={10}
+        y={170}
+      />
+    </SkiaCanvas>
+  </div>
+);

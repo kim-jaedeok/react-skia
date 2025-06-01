@@ -11,7 +11,7 @@ interface SkiaProviderProps {
   children: ReactNode;
 }
 
-export function SkiaProvider({ children }: SkiaProviderProps) {
+export const SkiaProvider = ({ children }: SkiaProviderProps) => {
   const [canvasKit, setCanvasKit] = useState<CanvasKit | null>(null);
 
   useEffect(() => {
@@ -36,4 +36,4 @@ export function SkiaProvider({ children }: SkiaProviderProps) {
   return (
     <SkiaContext.Provider value={contextValue}>{children}</SkiaContext.Provider>
   );
-}
+};
