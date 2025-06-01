@@ -16,7 +16,6 @@ export { ColorMatrix } from "./components/ColorMatrix";
 export { LinearGradient, RadialGradient } from "./components/Gradient";
 
 // Skia utilities
-export { Skia } from "./Skia";
 export type {
   SkiaElement,
   SkiaProps,

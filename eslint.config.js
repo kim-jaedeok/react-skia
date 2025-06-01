@@ -67,7 +67,7 @@ export default tseslint.config(
       "react/jsx-sort-props": ["error", { callbacksLast: true }],
 
       // React Hooks rules
-      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/exhaustive-deps": "error",
       "react-hooks/rules-of-hooks": "error",
 
       // Import/Export rules
