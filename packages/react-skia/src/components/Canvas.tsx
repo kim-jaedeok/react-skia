@@ -63,11 +63,8 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
           return surfaceRef.current;
         },
       });
-    } else {
-      console.error("No children to render");
+      surface.flush();
     }
-
-    surface.flush();
 
     return () => {
       // Clean up renderer first
