@@ -1,9 +1,9 @@
-import { Circle, Group, Rect, SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Circle, Group, Rect, Text } from "@react-skia/core";
 
 export const InteractiveDemo = () => (
   <div>
     <h3>🎮 상호작용</h3>
-    <SkiaCanvas height={200} style={{ cursor: "pointer" }} width={350}>
+    <Canvas height={200} style={{ cursor: "pointer" }} width={350}>
       <Group>
         <Rect color="#3498DB" height={60} width={100} x={50} y={50} />
         <Text color="#FFF" fontSize={16} text="Click Me!" x={70} y={85} />
@@ -28,6 +28,6 @@ export const InteractiveDemo = () => (
         x={10}
         y={170}
       />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

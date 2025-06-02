@@ -1,9 +1,9 @@
-import { Circle, Path, Rect, SkiaCanvas } from "@react-skia/core";
+import { Canvas, Circle, Path, Rect } from "@react-skia/core";
 
 export const ComplexScene = () => (
   <div>
     <h3>🏞 복합 그래픽</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       {/* Background sky */}
       <Rect color="#87CEEB" height={120} width={350} x={0} y={0} />
 
@@ -31,6 +31,6 @@ export const ComplexScene = () => (
       <Path color="#8B0000" path="M 195 110 L 220 90 L 245 110 Z" />
       <Rect color="#654321" height={12} width={8} x={210} y={120} />
       <Rect color="#FFD700" height={6} width={6} x={225} y={118} />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

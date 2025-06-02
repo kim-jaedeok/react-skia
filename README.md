@@ -19,16 +19,16 @@ pnpm install
 ### 기본 Skia 그래픽
 
 ```tsx
-import { Circle, Rect, SkiaCanvas, SkiaProvider, Text } from "./skia";
+import { Canvas, Circle, Rect, SkiaProvider, Text } from "./skia";
 
 function App() {
   return (
     <SkiaProvider>
-      <SkiaCanvas width={400} height={300}>
+      <Canvas width={400} height={300}>
         <Rect x={10} y={10} width={100} height={80} color="#FF6B6B" />
         <Circle cx={200} cy={50} r={30} color="#4ECDC4" />
         <Text x={10} y={150} text="Hello Skia Web!" fontSize={20} />
-      </SkiaCanvas>
+      </Canvas>
     </SkiaProvider>
   );
 }

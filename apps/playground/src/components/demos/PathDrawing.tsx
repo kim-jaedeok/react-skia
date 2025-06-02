@@ -1,9 +1,9 @@
-import { Path, SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Path, Text } from "@react-skia/core";
 
 export const PathDrawing = () => (
   <div>
     <h3>🎨 패스 그리기</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       <Path
         color="#F39C12"
         path="M 10 80 Q 95 10 180 80 T 300 80"
@@ -17,6 +17,6 @@ export const PathDrawing = () => (
         style="stroke"
       />
       <Text color="#666" fontSize={14} text="SVG 호환 패스" x={10} y={30} />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

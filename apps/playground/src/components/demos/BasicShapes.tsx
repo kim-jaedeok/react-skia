@@ -1,9 +1,9 @@
-import { Circle, Rect, SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Circle, Rect, Text } from "@react-skia/core";
 
 export const BasicShapes = () => (
   <div>
     <h3>🔸 기본 도형</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       <Rect color="#FF6B6B" height={60} width={80} x={10} y={10} />
       <Circle color="#4ECDC4" cx={150} cy={40} r={30} />
       <Rect
@@ -22,6 +22,6 @@ export const BasicShapes = () => (
         x={10}
         y={100}
       />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

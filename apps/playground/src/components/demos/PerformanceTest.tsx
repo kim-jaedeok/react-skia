@@ -1,9 +1,9 @@
-import { Circle, SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Circle, Text } from "@react-skia/core";
 
 export const PerformanceTest = () => (
   <div>
     <h3>🚀 성능 테스트</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       {Array.from({ length: 100 }, (_, i) => (
         <Circle
           color={`hsl(${Math.random() * 360}, 70%, 60%)`}
@@ -16,6 +16,6 @@ export const PerformanceTest = () => (
         />
       ))}
       <Text color="#FFF" fontSize={14} text="100개 원 렌더링" x={10} y={20} />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

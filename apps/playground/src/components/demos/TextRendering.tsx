@@ -1,9 +1,9 @@
-import { SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Text } from "@react-skia/core";
 
 export const TextRendering = () => (
   <div>
     <h3>📝 텍스트 렌더링</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       <Text
         color="#2C3E50"
         fontSize={24}
@@ -32,6 +32,6 @@ export const TextRendering = () => (
         x={10}
         y={160}
       />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

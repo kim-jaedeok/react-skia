@@ -1,9 +1,9 @@
-import { Circle, Group, Rect, SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Circle, Group, Rect, Text } from "@react-skia/core";
 
 export const GroupAndOpacity = () => (
   <div>
     <h3>👥 그룹 및 투명도</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       <Group opacity={0.8}>
         <Rect color="#E67E22" height={40} width={40} x={50} y={30} />
         <Circle color="#9B59B6" cx={120} cy={50} r={20} />
@@ -23,6 +23,6 @@ export const GroupAndOpacity = () => (
         x={10}
         y={180}
       />
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );

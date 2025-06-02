@@ -1,10 +1,10 @@
 import {
+  Canvas,
   Circle,
   LinearGradient,
   Path,
   RadialGradient,
   Rect,
-  SkiaCanvas,
   Text,
 } from "@react-skia/core";
 
@@ -19,7 +19,7 @@ export const GradientEffects = () => (
   >
     <div>
       <h3>🌈 그라디언트 효과</h3>
-      <SkiaCanvas height={250} width={350}>
+      <Canvas height={250} width={350}>
         {/* Simple Linear Gradient Test */}
         <Rect height={30} width={150} x={10} y={20}>
           <LinearGradient
@@ -95,12 +95,12 @@ export const GradientEffects = () => (
           x={10}
           y={240}
         />
-      </SkiaCanvas>
+      </Canvas>
     </div>
 
     <div>
       <h3>🚀 고급 그라디언트</h3>
-      <SkiaCanvas height={250} width={350}>
+      <Canvas height={250} width={350}>
         {/* 함수형 컴포넌트에 그라디언트 적용 */}
         <Rect height={40} width={100} x={10} y={20}>
           <LinearGradient
@@ -162,12 +162,12 @@ export const GradientEffects = () => (
           x={10}
           y={190}
         />
-      </SkiaCanvas>
+      </Canvas>
     </div>
 
     <div>
       <h3>⚡ 정밀 그라디언트</h3>
-      <SkiaCanvas height={250} width={350}>
+      <Canvas height={250} width={350}>
         {/* 색상 위치를 세밀하게 제어한 그라디언트 */}
         <Rect height={30} width={150} x={10} y={20}>
           <LinearGradient
@@ -236,7 +236,7 @@ export const GradientEffects = () => (
           x={10}
           y={175}
         />
-      </SkiaCanvas>
+      </Canvas>
     </div>
   </div>
 );

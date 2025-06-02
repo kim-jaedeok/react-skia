@@ -6,19 +6,14 @@ import type { Surface } from "canvaskit-wasm";
 import { useSkia } from "../hooks/useSkia";
 import { SkiaRenderer } from "../renderer/SkiaRenderer";
 
-interface SkiaCanvasProps {
+interface CanvasProps {
   width: number;
   height: number;
   children?: ReactNode;
   style?: CSSProperties;
 }
 
-export const SkiaCanvas = ({
-  width,
-  height,
-  children,
-  style,
-}: SkiaCanvasProps) => {
+export const Canvas = ({ width, height, children, style }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const surfaceRef = useRef<Surface | null>(null);
   const rendererRef = useRef<SkiaRenderer | null>(null);

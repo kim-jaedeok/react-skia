@@ -1,9 +1,9 @@
-import { Group, Image, Rect, SkiaCanvas, Text } from "@react-skia/core";
+import { Canvas, Group, Image, Rect, Text } from "@react-skia/core";
 
 export const ImageRendering = () => (
   <div>
     <h3>🖼️ 이미지 렌더링</h3>
-    <SkiaCanvas height={200} width={350}>
+    <Canvas height={200} width={350}>
       {/* Using a placeholder image URL */}
       <Image
         fit="cover"
@@ -58,6 +58,6 @@ export const ImageRendering = () => (
           y={165}
         />
       </Group>
-    </SkiaCanvas>
+    </Canvas>
   </div>
 );
