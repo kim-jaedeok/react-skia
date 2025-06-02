@@ -1,27 +1,10 @@
 import type { ReactNode } from "react";
 
-import type { Canvas, CanvasKit, Path, Surface } from "canvaskit-wasm";
+import type { Path } from "canvaskit-wasm";
 
 export interface ComponentProps {
   [key: string]: unknown;
   children?: ReactNode;
-}
-
-// Create aliases for better naming
-
-export interface SkiaContextValue {
-  /**
-   * The CanvasKit instance
-   */
-  CanvasKit: CanvasKit | null;
-  /**
-   * The Skia surface
-   */
-  surface: Surface | null;
-  /**
-   * The Skia canvas
-   */
-  canvas: Canvas | null;
 }
 
 /**

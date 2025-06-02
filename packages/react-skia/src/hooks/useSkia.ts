@@ -1,17 +1,20 @@
-import { createContext, useContext } from "react";
+import { useEffect } from "react";
 
-import type { SkiaContextValue } from "../types";
+import { useAtomValue, useSetAtom } from "jotai";
 
-export const SkiaContext = createContext<SkiaContextValue>({
-  CanvasKit: null,
-  surface: null,
-  canvas: null,
-});
+import { canvasKitAtom, loadCanvasKitAtom } from "../store/skiaStore";
 
 export const useSkia = () => {
-  const context = useContext(SkiaContext);
-  if (!context) {
-    throw new Error("useSkia must be used within a SkiaProvider");
-  }
-  return context;
+  const canvasKit = useAtomValue(canvasKitAtom);
+  const loadCanvasKit = useSetAtom(loadCanvasKitAtom);
+
+  useEffect(() => {
+    if (!canvasKit) {
+      loadCanvasKit();
+    }
+  }, [canvasKit, loadCanvasKit]);
+
+  return {
+    CanvasKit: canvasKit,
+  };
 };

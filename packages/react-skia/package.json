@@ -20,7 +20,8 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "canvaskit-wasm": "^0.40.0"
+    "canvaskit-wasm": "^0.40.0",
+    "jotai": "^2.12.5"
   },
   "peerDependencies": {
     "react": "^19.1.0",
