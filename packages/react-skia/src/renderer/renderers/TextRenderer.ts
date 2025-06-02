@@ -12,7 +12,8 @@ export class TextRenderer implements Renderer<TextProps> {
 
   render(props: TextProps, context: RendererContext) {
     const { x, y, text, fontSize = 16, color = "#000000" } = props;
-    const { canvas } = context;
+    const { getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     // TODO: Add gradient support for text in the future
     // Currently renders with basic color only

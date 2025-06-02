@@ -10,7 +10,8 @@ export class CircleRenderer implements Renderer<CircleProps> {
 
   render(props: CircleProps, context: RendererContext) {
     const { cx, cy, r, color, style, strokeWidth } = props;
-    const { canvas } = context;
+    const { getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     // Check if gradient exists first
     const hasGradient = this.utils.hasGradientChildren(props);

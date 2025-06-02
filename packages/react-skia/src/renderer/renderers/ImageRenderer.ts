@@ -21,17 +21,12 @@ export class ImageRenderer implements Renderer<ImageProps> {
       this.renderLoadingPlaceholder(x, y, width, height, context);
 
       // Start loading image
-      this.loadImage(src, context)
-        .then(image => {
-          if (image) {
-            this.renderImage(image, props, context);
-          } else {
-            console.warn(`Image not found: ${src}`);
-          }
-        })
-        .catch(error => {
-          console.error("Failed to load image:", error);
-        });
+      this.loadImage(src, context).then(image => {
+        if (image) {
+          this.renderImage(image, props, context);
+          context.getSurface().flush();
+        }
+      });
     } else {
       this.renderImage(cachedImage, props, context);
     }
@@ -43,7 +38,8 @@ export class ImageRenderer implements Renderer<ImageProps> {
     context: RendererContext,
   ) {
     const { x, y, width, height, fit = "fill", opacity = 1 } = props;
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     const paint = new CanvasKit.Paint();
     if (opacity < 1) {
@@ -113,7 +109,8 @@ export class ImageRenderer implements Renderer<ImageProps> {
     height: number,
     context: RendererContext,
   ) {
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     // Show loading placeholder
     const paint = this.utils.createPaint({ color: "#f0f0f0" });
@@ -148,10 +145,16 @@ export class ImageRenderer implements Renderer<ImageProps> {
 
     try {
       const image = await loadPromise;
-      this.imageCache.set(src, image);
+
+      if (image) {
+        this.imageCache.set(src, image);
+      } else {
+        console.warn(`Image not found: ${src}`);
+      }
+
       return image;
     } catch (error) {
-      throw error;
+      console.error("Failed to load image:", error);
     } finally {
       this.loadingImages.delete(src);
     }

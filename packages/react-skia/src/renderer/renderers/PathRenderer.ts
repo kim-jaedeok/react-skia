@@ -12,7 +12,8 @@ export class PathRenderer implements Renderer<PathProps> {
 
   render(props: PathProps, context: RendererContext) {
     const { path, color, style, strokeWidth } = props;
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     const paint = this.utils.createPaint({ color, style, strokeWidth });
 

@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import type { ComponentPropsWithoutRef } from "react";
 
+import { Surface } from "canvaskit-wasm";
+
 import { useSkia } from "../hooks/useSkia";
 import { SkiaRenderer } from "../renderer/SkiaRenderer";
 
@@ -9,6 +11,8 @@ type CanvasProps = ComponentPropsWithoutRef<"canvas">;
 export const Canvas = ({ children, ...rest }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { CanvasKit } = useSkia();
+  const surfaceRef = useRef<Surface | null>(null);
+  const rendererRef = useRef<SkiaRenderer | null>(null);
 
   useEffect(() => {
     if (!CanvasKit || !canvasRef.current) {
@@ -31,6 +35,7 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
 
     // Create surface using modern API with high-DPI support
     const surface = CanvasKit.MakeSWCanvasSurface(canvasElement);
+    surfaceRef.current = surface;
     if (!surface) {
       console.error("Failed to create surface");
       return;
@@ -45,9 +50,19 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
 
     // Create renderer instance
     const renderer = new SkiaRenderer(CanvasKit);
+    rendererRef.current = renderer;
 
     if (children) {
-      renderer.render(children, canvas);
+      renderer.render(children, {
+        CanvasKit,
+        getSurface: () => {
+          if (!surfaceRef.current) {
+            throw new Error("Surface is not initialized");
+          }
+
+          return surfaceRef.current;
+        },
+      });
     } else {
       console.error("No children to render");
     }
@@ -56,9 +71,16 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
 
     return () => {
       // Clean up renderer first
-      renderer.cleanup();
+      if (rendererRef.current) {
+        rendererRef.current.cleanup();
+        rendererRef.current = null;
+      }
+
       // Clean up surface
-      surface.delete();
+      if (surfaceRef.current) {
+        surfaceRef.current.delete();
+        surfaceRef.current = null;
+      }
     };
   }, [CanvasKit, children]);
 

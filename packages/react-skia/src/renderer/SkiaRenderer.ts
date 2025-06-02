@@ -6,7 +6,7 @@ import {
   isValidElement,
 } from "react";
 
-import type { Canvas, CanvasKit } from "canvaskit-wasm";
+import type { CanvasKit } from "canvaskit-wasm";
 
 import {
   BlurRenderer,
@@ -38,43 +38,43 @@ export class SkiaRenderer {
       [
         "skia-group",
         new GroupRenderer((children: ReactNode, context: RendererContext) =>
-          this.renderChildren(children, context.canvas),
+          this.renderChildren(children, context),
         ),
       ],
       [
         "skia-blur",
         new BlurRenderer((children: ReactNode, context: RendererContext) =>
-          this.renderChildren(children, context.canvas),
+          this.renderChildren(children, context),
         ),
       ],
       [
         "skia-colormatrix",
         new ColorMatrixRenderer(
           (children: ReactNode, context: RendererContext) =>
-            this.renderChildren(children, context.canvas),
+            this.renderChildren(children, context),
         ),
       ],
       ["skia-image", new ImageRenderer(this.utils)],
     ]);
   }
 
-  render(children: ReactNode, canvas: Canvas) {
+  render(children: ReactNode, context: RendererContext) {
     Children.forEach(children, child => {
       if (isValidElement(child)) {
-        this.renderReactElement(child, canvas);
+        this.renderReactElement(child, context);
       } else {
         console.error("Invalid React element:", child);
       }
     });
   }
 
-  private renderReactElement(element: ReactElement, canvas: Canvas) {
+  private renderReactElement(element: ReactElement, context: RendererContext) {
     const { type, props } = element;
 
     // React Fragment 처리
     if (type === Fragment) {
       if (props && typeof props === "object" && "children" in props) {
-        this.render(props.children as ReactNode, canvas);
+        this.render(props.children as ReactNode, context);
       }
       return;
     }
@@ -82,7 +82,7 @@ export class SkiaRenderer {
     // Symbol Fragment 처리 (JSX <></> 문법)
     if (typeof type === "symbol") {
       if (props && typeof props === "object" && "children" in props) {
-        this.render(props.children as ReactNode, canvas);
+        this.render(props.children as ReactNode, context);
       }
       return;
     }
@@ -90,10 +90,6 @@ export class SkiaRenderer {
     if (typeof type === "string") {
       const renderer = this.rendererMap.get(type);
       if (renderer) {
-        const context = {
-          CanvasKit: this.utils.getCanvasKit(),
-          canvas,
-        };
         renderer.render((props as unknown) || ({} as unknown), context);
       } else {
         console.warn(`Unsupported element type: ${type}`);
@@ -118,7 +114,7 @@ export class SkiaRenderer {
         }
 
         if (isValidElement(result)) {
-          this.renderReactElement(result, canvas);
+          this.renderReactElement(result, context);
         } else {
           console.error(
             " Component function did not return a valid React element",
@@ -147,13 +143,13 @@ export class SkiaRenderer {
       typeof type === "string" &&
       !elementsWithOwnChildRendering.has(type)
     ) {
-      this.render(props.children as ReactNode, canvas);
+      this.render(props.children as ReactNode, context);
     }
   }
 
   // Renderer들이 자식을 렌더링할 때 사용할 메서드
-  private renderChildren(children: ReactNode, canvas: Canvas) {
-    this.render(children, canvas);
+  private renderChildren(children: ReactNode, context: RendererContext) {
+    this.render(children, context);
   }
 
   // 새로운 렌더러를 Map에 동적으로 추가할 수 있는 메서드

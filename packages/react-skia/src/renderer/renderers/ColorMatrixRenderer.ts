@@ -16,7 +16,8 @@ export class ColorMatrixRenderer implements Renderer<ColorMatrixProps> {
 
   render(props: ColorMatrixProps, context: RendererContext) {
     const { matrix, children } = props;
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     canvas.save();
 

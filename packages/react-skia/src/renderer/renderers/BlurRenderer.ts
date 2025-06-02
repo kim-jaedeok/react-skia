@@ -16,7 +16,8 @@ export class BlurRenderer implements Renderer<BlurProps> {
 
   render(props: BlurProps, context: RendererContext) {
     const { blur, children } = props;
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     canvas.save();
 

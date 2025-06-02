@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import type { Canvas, CanvasKit } from "canvaskit-wasm";
+import type { CanvasKit, Surface } from "canvaskit-wasm";
 
 // Re-export types from the main types file
 export type {
@@ -22,9 +22,9 @@ export interface RendererContext {
    */
   CanvasKit: CanvasKit;
   /**
-   * The canvas to draw on
+   * @returns The current surface being rendered to
    */
-  canvas: Canvas;
+  getSurface: () => Surface;
 }
 
 /**

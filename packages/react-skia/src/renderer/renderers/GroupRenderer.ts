@@ -16,7 +16,8 @@ export class GroupRenderer implements Renderer<GroupProps> {
 
   render(props: GroupProps, context: RendererContext) {
     const { transform, opacity, children } = props;
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     canvas.save();
 

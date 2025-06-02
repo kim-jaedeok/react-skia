@@ -10,7 +10,8 @@ export class RectRenderer implements Renderer<RectProps> {
 
   render(props: RectProps, context: RendererContext) {
     const { x, y, width, height, color, style, strokeWidth } = props;
-    const { CanvasKit, canvas } = context;
+    const { CanvasKit, getSurface } = context;
+    const canvas = getSurface().getCanvas();
 
     // Check if gradient exists first
     const hasGradient = this.utils.hasGradientChildren(props);
