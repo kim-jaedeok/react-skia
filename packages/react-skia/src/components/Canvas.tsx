@@ -36,21 +36,17 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
     canvasElement.style.height = `${height}px`;
 
     // Create surface using modern API with high-DPI support
-    const surface = CanvasKit.MakeSWCanvasSurface(canvasElement);
-    surfaceRef.current = surface;
-    if (!surface) {
+    surfaceRef.current = CanvasKit.MakeSWCanvasSurface(canvasElement);
+    // Create renderer instance
+    rendererRef.current = new SkiaRenderer(CanvasKit);
+
+    if (!surfaceRef.current) {
       console.error("Failed to create surface");
       return;
     }
 
-    const canvas = surface.getCanvas();
-
     // Scale the drawing context for high-DPI
-    canvas.scale(pixelRatio, pixelRatio);
-    canvas.clear(CanvasKit.WHITE);
-
-    // Create renderer instance
-    rendererRef.current = new SkiaRenderer(CanvasKit);
+    surfaceRef.current.getCanvas().scale(pixelRatio, pixelRatio);
 
     return () => {
       // Clean up renderer first
