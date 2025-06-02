@@ -1,4 +1,4 @@
-import { Canvas, Text } from "@react-skia/core";
+import { Canvas, Text } from "react-skia";
 
 export const TextRendering = () => (
   <div>

@@ -1,4 +1,4 @@
-import { Canvas, Circle, Group, Rect, Text } from "@react-skia/core";
+import { Canvas, Circle, Group, Rect, Text } from "react-skia";
 
 export const InteractiveDemo = () => (
   <div>

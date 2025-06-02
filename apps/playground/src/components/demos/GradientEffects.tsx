@@ -6,7 +6,7 @@ import {
   RadialGradient,
   Rect,
   Text,
-} from "@react-skia/core";
+} from "react-skia";
 
 export const GradientEffects = () => (
   <div

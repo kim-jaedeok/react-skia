@@ -1,5 +1,5 @@
 {
-  "name": "@react-skia/core",
+  "name": "react-skia",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.cjs",

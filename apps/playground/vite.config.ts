@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@react-skia/core": resolve(__dirname, "../../packages/react-skia/src"),
+      "react-skia": resolve(__dirname, "../../packages/react-skia/src"),
     },
   },
 });

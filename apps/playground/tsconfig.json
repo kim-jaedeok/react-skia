@@ -7,7 +7,7 @@
     "incremental": true,
     "outDir": "./dist",
     "paths": {
-      "@react-skia/core": ["../../packages/react-skia/src"]
+      "react-skia": ["../../packages/react-skia/src"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/vite-env.d.ts"],
