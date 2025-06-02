@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { ComponentPropsWithoutRef } from "react";
 
-import type { Surface } from "canvaskit-wasm";
-
 import { useSkia } from "../hooks/useSkia";
 import { SkiaRenderer } from "../renderer/SkiaRenderer";
 
@@ -10,17 +8,16 @@ type CanvasProps = ComponentPropsWithoutRef<"canvas">;
 
 export const Canvas = ({ children, ...rest }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const surfaceRef = useRef<Surface | null>(null);
-  const rendererRef = useRef<SkiaRenderer | null>(null);
   const { CanvasKit } = useSkia();
+
   useEffect(() => {
     if (!CanvasKit || !canvasRef.current) {
       return;
     }
 
     // Get device pixel ratio for high-DPI displays
-    const pixelRatio = window.devicePixelRatio || 1;
     const canvasElement = canvasRef.current;
+    const pixelRatio = window.devicePixelRatio || 1;
     const width = canvasElement.clientWidth;
     const height = canvasElement.clientHeight;
 
@@ -39,18 +36,15 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
       return;
     }
 
-    surfaceRef.current = surface;
-
-    // Create renderer instance and store reference for cleanup
-    const renderer = new SkiaRenderer(CanvasKit);
-    rendererRef.current = renderer;
-
     // Render children
     const canvas = surface.getCanvas();
 
     // Scale the drawing context for high-DPI
     canvas.scale(pixelRatio, pixelRatio);
     canvas.clear(CanvasKit.WHITE);
+
+    // Create renderer instance
+    const renderer = new SkiaRenderer(CanvasKit);
 
     if (children) {
       renderer.render(children, canvas);
@@ -62,19 +56,9 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
 
     return () => {
       // Clean up renderer first
-      if (rendererRef.current) {
-        // Call cleanup method if renderer has one
-        if (typeof rendererRef.current.cleanup === "function") {
-          rendererRef.current.cleanup();
-        }
-        rendererRef.current = null;
-      }
-
+      renderer.cleanup();
       // Clean up surface
-      if (surfaceRef.current) {
-        surfaceRef.current.delete();
-        surfaceRef.current = null;
-      }
+      surface.delete();
     };
   }, [CanvasKit, children]);
 
