@@ -12,6 +12,10 @@ body {
   text-align: center;
 }
 
+canvas {
+  border: 1px solid #ccc;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

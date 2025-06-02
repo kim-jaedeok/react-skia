@@ -1,19 +1,14 @@
 import { useEffect, useRef } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 import type { Surface } from "canvaskit-wasm";
 
 import { useSkia } from "../hooks/useSkia";
 import { SkiaRenderer } from "../renderer/SkiaRenderer";
 
-interface CanvasProps {
-  width: number;
-  height: number;
-  children?: ReactNode;
-  style?: CSSProperties;
-}
+type CanvasProps = ComponentPropsWithoutRef<"canvas">;
 
-export const Canvas = ({ width, height, children, style }: CanvasProps) => {
+export const Canvas = ({ children, ...rest }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const surfaceRef = useRef<Surface | null>(null);
   const rendererRef = useRef<SkiaRenderer | null>(null);
@@ -26,6 +21,8 @@ export const Canvas = ({ width, height, children, style }: CanvasProps) => {
     // Get device pixel ratio for high-DPI displays
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasElement = canvasRef.current;
+    const width = canvasElement.clientWidth;
+    const height = canvasElement.clientHeight;
 
     // Set actual canvas size for high resolution
     canvasElement.width = width * pixelRatio;
@@ -79,19 +76,7 @@ export const Canvas = ({ width, height, children, style }: CanvasProps) => {
         surfaceRef.current = null;
       }
     };
-  }, [CanvasKit, children, width, height]);
+  }, [CanvasKit, children]);
 
-  return (
-    <canvas
-      height={height}
-      ref={canvasRef}
-      style={{
-        border: "1px solid #ccc",
-        width: `${width}px`,
-        height: `${height}px`,
-        ...style,
-      }}
-      width={width}
-    />
-  );
+  return <canvas ref={canvasRef} {...rest} />;
 };
