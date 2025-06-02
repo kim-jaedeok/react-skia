@@ -66,6 +66,7 @@ export class SkiaRenderer {
         console.error("Invalid React element:", child);
       }
     });
+    context.getSurface().flush();
   }
 
   private renderReactElement(element: ReactElement, context: RendererContext) {

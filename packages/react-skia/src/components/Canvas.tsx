@@ -14,6 +14,8 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
   const surfaceRef = useRef<Surface | null>(null);
   const rendererRef = useRef<SkiaRenderer | null>(null);
 
+  // Initialize Surface and Renderer
+  // Scale canvas for high-DPI displays
   useEffect(() => {
     if (!CanvasKit || !canvasRef.current) {
       return;
@@ -41,7 +43,6 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
       return;
     }
 
-    // Render children
     const canvas = surface.getCanvas();
 
     // Scale the drawing context for high-DPI
@@ -49,22 +50,7 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
     canvas.clear(CanvasKit.WHITE);
 
     // Create renderer instance
-    const renderer = new SkiaRenderer(CanvasKit);
-    rendererRef.current = renderer;
-
-    if (children) {
-      renderer.render(children, {
-        CanvasKit,
-        getSurface: () => {
-          if (!surfaceRef.current) {
-            throw new Error("Surface is not initialized");
-          }
-
-          return surfaceRef.current;
-        },
-      });
-      surface.flush();
-    }
+    rendererRef.current = new SkiaRenderer(CanvasKit);
 
     return () => {
       // Clean up renderer first
@@ -79,6 +65,24 @@ export const Canvas = ({ children, ...rest }: CanvasProps) => {
         surfaceRef.current = null;
       }
     };
+  }, [CanvasKit]);
+
+  // Render the children using the renderer
+  useEffect(() => {
+    if (!CanvasKit || !surfaceRef.current || !rendererRef.current) {
+      return;
+    }
+
+    rendererRef.current.render(children, {
+      CanvasKit,
+      getSurface: () => {
+        if (!surfaceRef.current) {
+          throw new Error("Surface is not initialized");
+        }
+
+        return surfaceRef.current;
+      },
+    });
   }, [CanvasKit, children]);
 
   return <canvas ref={canvasRef} {...rest} />;
