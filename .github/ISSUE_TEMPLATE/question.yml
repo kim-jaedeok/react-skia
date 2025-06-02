@@ -1,0 +1,69 @@
+name: Question / Help
+description: Ask a question about using React Skia
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about using React Skia? We're here to help!
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What's your question?
+      description: Describe what you're trying to achieve or understand
+      placeholder: I'm trying to... but I'm not sure how to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: What have you tried?
+      description: What approaches have you already attempted?
+      placeholder: I've tried... but it didn't work because...
+
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Current code (if applicable)
+      description: Share the code you're working with
+      render: typescript
+      placeholder: |
+        import { Canvas, Rect } from 'react-skia';
+
+        function MyComponent() {
+          // Your current code here
+        }
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: What topic is this about?
+      options:
+        - Basic usage / Getting started
+        - Rendering components (Rect, Circle, Path, etc.)
+        - Canvas and drawing
+        - Performance optimization
+        - TypeScript types
+        - Integration with React
+        - Browser compatibility
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: react-skia-version
+    attributes:
+      label: React Skia version
+      placeholder: e.g., 0.1.0
+
+  - type: checkboxes
+    id: documentation-checked
+    attributes:
+      label: Have you checked the documentation?
+      options:
+        - label: I've read the README
+        - label: I've looked at the playground examples
+        - label: I've searched existing issues

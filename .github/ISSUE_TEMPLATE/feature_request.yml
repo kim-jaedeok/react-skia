@@ -1,0 +1,81 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for React Skia
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please describe what you'd like to see added.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature description
+      description: What feature would you like to see added?
+      placeholder: A clear description of the feature you'd like
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-solving
+    attributes:
+      label: Problem this solves
+      description: What problem does this feature solve?
+      placeholder: Describe the use case or problem this feature would address
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: How do you think this should work?
+      placeholder: Describe how you envision this feature working
+
+  - type: textarea
+    id: api-example
+    attributes:
+      label: API example
+      description: Show how this feature might be used
+      render: typescript
+      placeholder: |
+        import { Canvas, NewComponent } from 'react-skia';
+
+        function MyComponent() {
+          return (
+            <Canvas>
+              <NewComponent prop1="value" prop2={123} />
+            </Canvas>
+          );
+        }
+
+  - type: dropdown
+    id: component-type
+    attributes:
+      label: What type of component/feature is this?
+      options:
+        - New rendering component (Shape, Effect, etc.)
+        - Canvas enhancement
+        - Performance improvement
+        - Developer experience
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: existing-alternatives
+    attributes:
+      label: Have you considered alternatives?
+      options:
+        - label: I've looked for existing solutions
+        - label: I've considered workarounds
+        - label: This feature would significantly improve the developer experience
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context, screenshots, or examples
+      placeholder: Links to similar features in other libraries, mockups, etc.

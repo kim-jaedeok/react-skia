@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://github.com/kim-jaedeok/react-skia#readme
+    about: Check out the README and playground examples
