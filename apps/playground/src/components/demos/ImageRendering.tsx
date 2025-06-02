@@ -8,7 +8,7 @@ export const ImageRendering = () => (
       <Image
         fit="cover"
         height={80}
-        src="/demo-images/sample-1.svg"
+        src="demo-images/sample-1.png"
         width={80}
         x={10}
         y={10}
@@ -17,7 +17,7 @@ export const ImageRendering = () => (
       <Image
         fit="contain"
         height={80}
-        src="/demo-images/sample-2.svg"
+        src="demo-images/sample-2.svg"
         width={80}
         x={100}
         y={10}
@@ -26,7 +26,7 @@ export const ImageRendering = () => (
       <Image
         fit="fill"
         height={80}
-        src="/demo-images/sample-3.svg"
+        src="demo-images/sample-3.svg"
         width={80}
         x={190}
         y={10}
@@ -41,7 +41,7 @@ export const ImageRendering = () => (
       <Image
         height={60}
         opacity={0.5}
-        src="/demo-images/sample-4.svg"
+        src="demo-images/sample-4.svg"
         width={60}
         x={280}
         y={10}

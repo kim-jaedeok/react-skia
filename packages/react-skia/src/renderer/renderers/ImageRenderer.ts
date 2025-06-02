@@ -13,8 +13,7 @@ export class ImageRenderer implements Renderer<ImageProps> {
   }
 
   render(props: ImageProps, context: RendererContext) {
-    const { x, y, width, height, src, fit = "fill", opacity = 1 } = props;
-    const { CanvasKit, canvas } = context;
+    const { x, y, width, height, src } = props;
 
     const cachedImage = this.imageCache.get(src);
     if (!cachedImage) {
@@ -23,24 +22,36 @@ export class ImageRenderer implements Renderer<ImageProps> {
 
       // Start loading image
       this.loadImage(src, context)
-        .then(() => {
-          // Image loaded, trigger re-render if needed
-          // This would need to be handled by the component state
+        .then(image => {
+          if (image) {
+            this.renderImage(image, props, context);
+          } else {
+            console.warn(`Image not found: ${src}`);
+          }
         })
         .catch(error => {
           console.error("Failed to load image:", error);
         });
-
-      return;
+    } else {
+      this.renderImage(cachedImage, props, context);
     }
+  }
+
+  private renderImage(
+    image: Image,
+    props: ImageProps,
+    context: RendererContext,
+  ) {
+    const { x, y, width, height, fit = "fill", opacity = 1 } = props;
+    const { CanvasKit, canvas } = context;
 
     const paint = new CanvasKit.Paint();
     if (opacity < 1) {
       paint.setAlphaf(opacity);
     }
 
-    const imageWidth = cachedImage?.width?.() ?? 0;
-    const imageHeight = cachedImage?.height?.() ?? 0;
+    const imageWidth = image.width();
+    const imageHeight = image.height();
 
     let srcRect = CanvasKit.XYWHRect(0, 0, imageWidth, imageHeight);
     let destRect = CanvasKit.XYWHRect(x, y, width, height);
@@ -90,7 +101,7 @@ export class ImageRenderer implements Renderer<ImageProps> {
       );
     }
 
-    canvas.drawImageRect(cachedImage, srcRect, destRect, paint);
+    canvas.drawImageRect(image, srcRect, destRect, paint);
 
     paint.delete();
   }
@@ -126,11 +137,6 @@ export class ImageRenderer implements Renderer<ImageProps> {
   }
 
   private async loadImage(src: string, context: RendererContext) {
-    // Check cache first
-    if (this.imageCache.has(src)) {
-      return this.imageCache.get(src);
-    }
-
     // Check if already loading
     if (this.loadingImages.has(src)) {
       return this.loadingImages.get(src);
@@ -143,40 +149,15 @@ export class ImageRenderer implements Renderer<ImageProps> {
     try {
       const image = await loadPromise;
       this.imageCache.set(src, image);
-      this.loadingImages.delete(src);
       return image;
     } catch (error) {
-      this.loadingImages.delete(src);
       throw error;
+    } finally {
+      this.loadingImages.delete(src);
     }
   }
 
-  private async loadImageFromSource(
-    src: string,
-    context: RendererContext,
-  ): Promise<Image | null> {
-    // Try multiple approaches to load the image
-    const attempts = [
-      () => this.loadWithImageElement(src, context),
-      () =>
-        this.loadWithImageElement(src.replace("https://", "http://"), context),
-    ];
-
-    for (let i = 0; i < attempts.length; i++) {
-      try {
-        const result = await attempts[i]();
-        return result;
-      } catch {
-        if (i === attempts.length - 1) {
-          // Last attempt failed, return null to show placeholder
-          return null;
-        }
-      }
-    }
-    return null;
-  }
-
-  private loadWithImageElement(
+  private loadImageFromSource(
     src: string,
     context: RendererContext,
   ): Promise<Image | null> {
@@ -241,19 +222,24 @@ export class ImageRenderer implements Renderer<ImageProps> {
         pixels,
         canvas.width * 4,
       );
-    } catch {
-      // Method 1 failed, try method 2
+    } catch (error) {
+      console.warn("Failed to create image with MakeImage:", error);
     }
 
+    // Method 1 failed, try method 2
     if (!skiaImage) {
       try {
         // Method 2: MakeImageFromCanvasImageSource
         skiaImage = context.CanvasKit.MakeImageFromCanvasImageSource(canvas);
-      } catch {
-        // Method 2 failed, try method 3
+      } catch (error) {
+        console.warn(
+          "Failed to create image with MakeImageFromCanvasImageSource:",
+          error,
+        );
       }
     }
 
+    // Method 2 failed, try method 3
     if (!skiaImage) {
       throw new Error("Failed to create CanvasKit image from HTML image");
     }
