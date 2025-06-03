@@ -3,12 +3,18 @@
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "react-jsx",
+    "composite": true,
+    "incremental": true,
     "outDir": "./dist",
-    "skipLibCheck": true,
     "paths": {
       "react-skia": ["../../packages/react-skia/src"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/vite-env.d.ts"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules"],
+  "references": [
+    {
+      "path": "../../packages/react-skia"
+    }
+  ]
 }
