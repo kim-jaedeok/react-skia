@@ -65,7 +65,7 @@ export class SkiaRenderer {
       if (isValidElement(child)) {
         this.#renderReactElement(child, context);
       } else {
-        console.error("Invalid React element:", child);
+        throw new Error(`Invalid React element: ${child}`);
       }
     });
   }
