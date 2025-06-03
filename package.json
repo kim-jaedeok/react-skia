@@ -19,13 +19,16 @@
     "test:watch": "turbo run test:watch",
     "test:coverage": "turbo run test:coverage",
     "prepare": "husky",
-    "cleanup": "knip --fix"
+    "cleanup": "knip --fix",
+    "pre-commit:parallel": "concurrently \"pnpm check-types\" \"pnpm lint:fix\" \"pnpm format\" --kill-others-on-fail",
+    "validate": "pnpm cleanup && pnpm install && pnpm pre-commit:parallel && pnpm build && pnpm test"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.25.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "concurrently": "^9.1.2",
     "eslint": "^9.25.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",

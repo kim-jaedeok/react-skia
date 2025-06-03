@@ -1,7 +1,7 @@
-pnpm cleanup
-pnpm install
-pnpm build
-pnpm check-types
-pnpm lint:fix
-pnpm format
-pnpm test
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+set -e  # Exit on any error
+
+echo "🚀 Running pre-commit validation..."
+pnpm validate
