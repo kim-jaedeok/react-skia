@@ -6,9 +6,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createMockCanvas,
   createMockCanvasKit,
-  createMockConsoleError,
   createMockSurface,
-} from "../__tests__/setup";
+} from "../__tests__/mocks/canvaskit-wasm";
 import { Circle } from "../components/Circle";
 import { Group } from "../components/Group";
 import { Rect } from "../components/Rect";
@@ -366,9 +365,6 @@ describe("SkiaRenderer", () => {
     });
 
     it("should handle mixed valid and invalid children", () => {
-      // overwrite console.error to capture errors
-      createMockConsoleError();
-
       const mixedChildren = [
         <Rect x={0} y={0} width={50} height={50} />,
         "invalid element",
