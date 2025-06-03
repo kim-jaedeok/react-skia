@@ -156,20 +156,6 @@ export interface BlurProps extends ComponentProps {
 }
 
 /**
- * Properties for a color matrix effect element.
- */
-export interface ColorMatrixProps extends ComponentProps {
-  /**
-   * Color matrix values
-   */
-  matrix: number[];
-  /**
-   * Child elements affected by the color matrix
-   */
-  children?: ReactNode;
-}
-
-/**
  * Properties for an image element.
  */
 export interface ImageProps extends ComponentProps {

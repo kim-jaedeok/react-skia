@@ -11,7 +11,6 @@ import type { CanvasKit } from "canvaskit-wasm";
 import {
   BlurRenderer,
   CircleRenderer,
-  ColorMatrixRenderer,
   GroupRenderer,
   ImageRenderer,
   PathRenderer,
@@ -45,13 +44,6 @@ export class SkiaRenderer {
         "skia-blur",
         new BlurRenderer((children: ReactNode, context: RendererContext) =>
           this.#renderChildren(children, context),
-        ),
-      ],
-      [
-        "skia-colormatrix",
-        new ColorMatrixRenderer(
-          (children: ReactNode, context: RendererContext) =>
-            this.#renderChildren(children, context),
         ),
       ],
       ["skia-image", new ImageRenderer(this.#utils)],
@@ -102,7 +94,7 @@ export class SkiaRenderer {
       if (renderer) {
         renderer.render((props as unknown) || ({} as unknown), context);
       } else {
-        console.warn(`Unsupported element type: ${type}`);
+        console.error(`Unsupported element type: ${type}`);
       }
     } else if (typeof type === "function") {
       try {

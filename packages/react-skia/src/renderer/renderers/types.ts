@@ -11,7 +11,6 @@ export type {
   PathProps,
   GroupProps,
   BlurProps,
-  ColorMatrixProps,
   ComponentProps,
 } from "../../types";
 

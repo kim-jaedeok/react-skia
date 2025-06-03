@@ -10,7 +10,6 @@ export { Path } from "./components/Path";
 export { Text } from "./components/Text";
 export { Image } from "./components/Image";
 export { Blur } from "./components/Blur";
-export { ColorMatrix } from "./components/ColorMatrix";
 export { LinearGradient, RadialGradient } from "./components/Gradient";
 
 // Skia utilities

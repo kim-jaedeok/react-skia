@@ -4,3 +4,4 @@ pnpm build
 pnpm check-types
 pnpm lint:fix
 pnpm format
+pnpm test

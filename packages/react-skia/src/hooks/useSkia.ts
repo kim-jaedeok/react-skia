@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 
+import { CanvasKit } from "canvaskit-wasm";
 import { useAtomValue, useSetAtom } from "jotai";
 
 import { canvasKitAtom, loadCanvasKitAtom } from "../store/skiaStore";
 
-export const useSkia = () => {
+export type UseSkia = () => { CanvasKit: CanvasKit | null };
+
+export const useSkia: UseSkia = () => {
   const canvasKit = useAtomValue(canvasKitAtom);
   const loadCanvasKit = useSetAtom(loadCanvasKitAtom);
 

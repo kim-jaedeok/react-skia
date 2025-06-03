@@ -6,5 +6,4 @@ export { PathRenderer } from "./PathRenderer";
 export { TextRenderer } from "./TextRenderer";
 export { GroupRenderer } from "./GroupRenderer";
 export { BlurRenderer } from "./BlurRenderer";
-export { ColorMatrixRenderer } from "./ColorMatrixRenderer";
 export { ImageRenderer } from "./ImageRenderer";
