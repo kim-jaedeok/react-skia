@@ -1,0 +1,30 @@
+name: "Setup Node.js and pnpm with cache"
+description: "Setup Node.js, pnpm, and restore node_modules cache"
+
+inputs:
+  restore-cache:
+    description: "Whether to restore node_modules cache"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22.16.0"
+        cache: "pnpm"
+
+    - name: Restore node_modules cache
+      if: ${{ inputs.restore-cache == 'true' }}
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}

@@ -15,9 +15,6 @@ const config: KnipConfig = {
       project: ["src/**/*.{ts,tsx}"],
     },
   },
-  ignoreDependencies: [
-    "@commitlint/cli", // Used by husky git hooks
-  ],
 };
 
 export default config;
