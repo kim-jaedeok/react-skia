@@ -1,7 +1,39 @@
+set -e  # Exit on any error
+
+echo "🧹 Cleaning up unused dependencies..."
 pnpm cleanup
+
+echo "📦 Installing dependencies..."
 pnpm install
-pnpm build
-pnpm check-types
-pnpm lint:fix
-pnpm format
+
+echo "🔄 Running parallel checks..."
+# Run independent tasks in parallel with proper error handling
+{
+  echo "🔍 Type checking..." && pnpm check-types
+} &
+TYPE_CHECK_PID=$!
+
+{
+  echo "🔧 Linting code..." && pnpm lint
+} &
+LINT_PID=$!
+
+{
+  echo "💅 Formatting code..." && pnpm format:check
+} &
+FORMAT_PID=$!
+
+# Wait for all parallel tasks to complete
+wait $TYPE_CHECK_PID || exit 1
+wait $LINT_PID || exit 1  
+wait $FORMAT_PID || exit 1
+
+echo "✅ Parallel checks completed successfully"
+
+echo "🧪 Running tests..."
 pnpm test
+
+echo "🏗️ Building packages..."
+pnpm build
+
+echo "🎉 Pre-commit checks completed successfully!"
