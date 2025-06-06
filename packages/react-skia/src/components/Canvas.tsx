@@ -6,11 +6,15 @@ import { Surface } from "canvaskit-wasm";
 import { useSkia } from "../hooks/useSkia";
 import { SkiaRenderer } from "../renderer/SkiaRenderer";
 
-type CanvasProps = ComponentPropsWithoutRef<"canvas">;
+interface CanvasProps extends ComponentPropsWithoutRef<"canvas"> {
+  options?: Partial<{
+    canvasKitPath: (file: string) => string;
+  }>;
+}
 
-export const Canvas = ({ children, ...rest }: CanvasProps) => {
+export const Canvas = ({ options, children, ...rest }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { CanvasKit } = useSkia();
+  const { CanvasKit } = useSkia(options);
   const surfaceRef = useRef<Surface | null>(null);
   const rendererRef = useRef<SkiaRenderer | null>(null);
 

@@ -2,6 +2,9 @@
 export { Canvas } from "./components/Canvas";
 export { useSkia } from "./hooks/useSkia";
 
+// Configuration
+export { canvasKitConfigAtom } from "./store/skiaStore";
+
 // Skia components
 export { Group } from "./components/Group";
 export { Rect } from "./components/Rect";

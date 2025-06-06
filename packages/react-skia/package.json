@@ -12,6 +12,13 @@
       "require": "./dist/index.cjs"
     }
   },
+  "bin": {
+    "react-skia": "./scripts/cli.cjs"
+  },
+  "files": [
+    "dist",
+    "scripts"
+  ],
   "scripts": {
     "build": "pnpm run clean && vite build",
     "clean": "rm -rf dist",
@@ -20,7 +27,8 @@
     "check-types": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "postinstall": "node scripts/copy-wasm-file.cjs"
   },
   "dependencies": {
     "canvaskit-wasm": "^0.40.0",

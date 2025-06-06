@@ -2,7 +2,6 @@ import "@testing-library/jest-dom";
 import { cleanup } from "@testing-library/react";
 import { afterEach, beforeAll, vi } from "vitest";
 
-import { UseSkia } from "../hooks/useSkia";
 import { createMockCanvasKit } from "./mocks/canvaskit-wasm";
 
 // Global console.error spy for catching rendering errors
@@ -104,13 +103,13 @@ beforeAll(() => {
   });
 });
 
-// Mock useSkia hook
-vi.mock("../hooks/useSkia", () => ({
-  useSkia: vi.fn(() => {
-    const skia: ReturnType<UseSkia> = {
-      CanvasKit: createMockCanvasKit(),
-    };
-
-    return skia;
+// Mock CanvasKit WASM loading
+vi.mock("canvaskit-wasm", () => ({
+  default: vi.fn().mockImplementation(options => {
+    // Call locateFile if provided to trigger the spy in tests
+    if (options?.locateFile) {
+      options.locateFile("canvaskit.wasm");
+    }
+    return Promise.resolve(createMockCanvasKit());
   }),
 }));

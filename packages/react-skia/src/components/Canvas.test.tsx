@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Canvas } from "./Canvas";
 import { Circle } from "./Circle";
@@ -40,5 +40,25 @@ describe("Canvas Component", () => {
 
     const canvas = document.querySelector("canvas");
     expect(canvas).toHaveClass("custom-canvas");
+  });
+
+  it("should handle CanvasKit configuration options", () => {
+    const canvasKitPath = vi.fn((file: string) => `/path/to/canvaskit/${file}`);
+    const customOptions = {
+      canvasKitPath,
+    };
+
+    render(
+      <Canvas width={300} height={200} options={customOptions}>
+        <Rect x={10} y={10} width={50} height={30} color="#FF0000" />
+      </Canvas>,
+    );
+
+    const canvas = document.querySelector("canvas");
+    expect(canvas).toBeInTheDocument();
+    expect(canvasKitPath).toHaveBeenCalled();
+    expect(canvasKitPath).toHaveReturnedWith(
+      expect.stringContaining("/path/to/canvaskit/canvaskit.wasm"),
+    );
   });
 });
