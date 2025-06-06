@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // CLI tool to setup React Skia in user's project
-const { copyWasmFile } = require("./postinstall.cjs");
+const { copyWasmFile } = require("./copy-wasm-file.cjs");
 
 function showHelp() {
   console.log(`
