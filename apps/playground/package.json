@@ -4,16 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "clean": "rm -rf dist",
     "dev": "vite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check-types": "tsc --noEmit",
-    "preview": "vite preview"
+    "preview": "pnpm run clean && vite build && vite preview"
   },
   "dependencies": {
-    "react-skia": "workspace:*",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-skia": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.1.2",
