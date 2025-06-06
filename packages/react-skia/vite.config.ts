@@ -10,7 +10,11 @@ export default defineConfig(({ mode }) => ({
     react(),
     dts({
       include: ["src/**/*"],
-      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+      exclude: [
+        "src/**/__tests__/**/*",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+      ],
       outDir: "dist",
       copyDtsFiles: true,
     }),
