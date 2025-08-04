@@ -12,12 +12,12 @@
     "preview": "pnpm run clean && vite build && vite preview"
   },
   "dependencies": {
-    "react": "^19.1.0",
+    "react": "^19.1.1",
     "react-dom": "^19.1.0",
     "react-skia": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "^19.1.2",
+    "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.1",
     "typescript": "~5.8.3",
