@@ -76,7 +76,7 @@ jobs:
         run: pnpm build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-artifacts
           path: |
@@ -124,7 +124,7 @@ jobs:
         run: pnpm cleanup --reporter json > knip-report.json || true
 
       - name: Upload knip report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: knip-report
